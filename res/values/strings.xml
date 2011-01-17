@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, LiveButton!</string>
+    <string name="app_name">Live Button</string>
+<string name="startOnBoot">Start on phone boot</string>
+<string name="textRepeat">Repeat every</string>
+<string name="buttonStart">Start</string>
+<string name="textCallNumber">Call number</string>
+<string name="textPickNumber">Pick number</string>
+<string name="buttonPick">Pick phone</string>
+<string name="timeRemaining">Time remaining: </string>
+<string name="buttonCancelCall">Cancel call</string>
+<string name="buttonStop">Stop</string>
+<string name="textHours">Hours</string>
+<string name="textMinutes">Minutes</string>
+</resources>

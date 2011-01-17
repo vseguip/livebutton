@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="fill_parent" android:layout_width="fill_parent"
+	android:id="@+id/LinearLayout01" android:orientation="vertical">
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="0dip" android:layout_weight="1"
+		android:orientation="vertical">
+		<TextView android:layout_height="wrap_content" android:text="@string/textRepeat"
+			android:layout_width="fill_parent"
+			android:id="@+id/TextView01" android:paddingTop="10dip"
+			android:paddingBottom="10dip"
+			android:textAppearance="?android:attr/textAppearanceLarge"></TextView>
+		<LinearLayout android:id="@+id/LinearLayout03"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:orientation="horizontal">
+			<Spinner android:id="@+id/SpinnerHours" android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				></Spinner>
+			<TextView android:layout_height="wrap_content" android:text="@string/textHours"
+				android:textStyle="bold" android:layout_width="fill_parent"
+				android:id="@+id/TextView01" android:paddingTop="10dip" android:paddingRight="30dip"
+				android:paddingBottom="10dip"></TextView>
+
+			<Spinner android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/SpinnerMinutes"
+				></Spinner>
+			<TextView android:layout_height="wrap_content" android:text="@string/textMinutes"
+				android:textStyle="bold" android:layout_width="fill_parent"
+				android:id="@+id/TextView01" android:paddingTop="10dip"
+				android:paddingBottom="10dip"></TextView>
+
+		</LinearLayout>
+		<TextView android:layout_height="wrap_content" android:text="@string/textCallNumber"
+			android:textAppearance="?android:attr/textAppearanceLarge" android:layout_width="fill_parent"
+			android:id="@+id/textCallNumber" android:paddingTop="10dip" android:paddingBottom="10dip"></TextView>
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_height="wrap_content" android:layout_width="fill_parent"
+			android:id="@+id/LinearLayout02" android:orientation="horizontal">
+			<Button android:text="@string/buttonPick" android:id="@+id/buttonPick"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:paddingRight="10dip"></Button>
+			<EditText android:layout_height="wrap_content" android:text=""
+				android:layout_width="fill_parent" android:id="@+id/textPhone"
+				android:phoneNumber="true"></EditText>
+
+		</LinearLayout>
+
+		<TextView android:layout_height="wrap_content" android:text="Start options"
+			android:layout_width="fill_parent"
+			android:id="@+id/textCallNumber" android:paddingTop="20dip"
+			android:paddingBottom="10dip" android:gravity="bottom"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			>
+			></TextView>
+
+		<CheckBox android:layout_width="fill_parent" android:id="@+id/cbStartOnBoot"
+			android:layout_gravity="left" android:text="@string/startOnBoot"
+
+			android:layout_height="wrap_content" android:paddingBottom="10dip"
+			android:drawablePadding="10dip" android:gravity="center_vertical"
+			android:checked="false"></CheckBox>
+
+	
+
+
+
+
+</LinearLayout>
+	<LinearLayout android:layout_width="wrap_content"
+		style="@android:style/ButtonBar" android:layout_height="wrap_content"
+		android:orientation="vertical">
+		<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:stretchColumns="0,1">
+
+			<TableRow>
+				<Button android:layout_height="fill_parent" android:text="@string/buttonStart"
+					android:id="@+id/buttonStart" android:layout_width="fill_parent"
+					android:layout_column="0">
+				</Button>
+				<Button android:layout_height="fill_parent" android:text="@string/buttonStop"
+					android:id="@+id/buttonStop" android:layout_width="fill_parent"
+					android:layout_column="1">
+				</Button>
+
+
+			</TableRow>
+
+		</TableLayout>
+	</LinearLayout>
+
+
+
+
+
+
+
+	<!--</LinearLayout>-->
+
+</LinearLayout>
+
