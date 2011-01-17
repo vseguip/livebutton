@@ -57,7 +57,7 @@ public class LiveButton extends Activity {
 		
 		ArrayAdapter<?> adapter2 = ArrayAdapter.createFromResource(this,
 				R.array.minuteArray, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinMinute.setAdapter(adapter2);
 		
 
