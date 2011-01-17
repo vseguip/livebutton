@@ -91,11 +91,17 @@ public class LiveButton extends Activity {
 
 					AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 					int hours = Integer.parseInt(spinHour.getSelectedItem().toString());
-					int minutes = Integer.parseInt(spinMinute.getSelectedItem().toString());
+					int minutes = Integer.parseInt(spinMinute.getSelectedItem().toString());					
 					long interval = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000);
-					alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System
+					if(interval>0){
+						alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System
 							.currentTimeMillis() + 1000, interval, sender);
-					writeSettings();
+						writeSettings();
+					} else {
+						Toast.makeText(LiveButton.this,
+								"You have to select a valid interval (one of the hour or minute field must be greater than zero).", Toast.LENGTH_SHORT)
+								.show();
+					}
 				} else {
 					Toast.makeText(LiveButton.this,
 							"Aborting no phone selected.", Toast.LENGTH_SHORT)
