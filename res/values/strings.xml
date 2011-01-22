@@ -13,4 +13,8 @@
 <string name="buttonStop">Stop</string>
 <string name="textHours">Hours</string>
 <string name="textMinutes">Minutes</string>
+
+<string name="textActiveTime">Live Button active interval</string>
+<string name="textUntil">Stop Live Button at</string>
+<string name="textFrom">Start Live button at</string>
 </resources>

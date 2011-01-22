@@ -5,67 +5,125 @@
 	<LinearLayout android:layout_width="fill_parent"
 		android:layout_height="0dip" android:layout_weight="1"
 		android:orientation="vertical">
-		<TextView android:layout_height="wrap_content" android:text="@string/textRepeat"
-			android:layout_width="fill_parent"
-			android:id="@+id/TextView01" android:paddingTop="10dip"
-			android:paddingBottom="10dip"
-			android:textAppearance="?android:attr/textAppearanceLarge"></TextView>
-		<LinearLayout android:id="@+id/LinearLayout03"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:orientation="horizontal">
-			<Spinner android:id="@+id/SpinnerHours" android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				></Spinner>
-			<TextView android:layout_height="wrap_content" android:text="@string/textHours"
-				android:textStyle="bold" android:layout_width="fill_parent"
-				android:id="@+id/TextView01" android:paddingTop="10dip" android:paddingRight="30dip"
-				android:paddingBottom="10dip"></TextView>
+		<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+			android:id="@android:id/tabhost" android:layout_width="fill_parent"
+			android:layout_height="fill_parent">
+			<LinearLayout android:layout_width="fill_parent"
+				android:layout_height="fill_parent" android:orientation="vertical">
 
-			<Spinner android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/SpinnerMinutes"
-				></Spinner>
-			<TextView android:layout_height="wrap_content" android:text="@string/textMinutes"
-				android:textStyle="bold" android:layout_width="fill_parent"
-				android:id="@+id/TextView01" android:paddingTop="10dip"
-				android:paddingBottom="10dip"></TextView>
+				<TabWidget android:id="@android:id/tabs"
+					android:layout_width="fill_parent" android:layout_height="wrap_content" />
 
-		</LinearLayout>
-		<TextView android:layout_height="wrap_content" android:text="@string/textCallNumber"
-			android:textAppearance="?android:attr/textAppearanceLarge" android:layout_width="fill_parent"
-			android:id="@+id/textCallNumber" android:paddingTop="10dip" android:paddingBottom="10dip"></TextView>
-		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			android:layout_height="wrap_content" android:layout_width="fill_parent"
-			android:id="@+id/LinearLayout02" android:orientation="horizontal">
-			<Button android:text="@string/buttonPick" android:id="@+id/buttonPick"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:paddingRight="10dip"></Button>
-			<EditText android:layout_height="wrap_content" android:text=""
-				android:layout_width="fill_parent" android:id="@+id/textPhone"
-				android:phoneNumber="true"></EditText>
+				<FrameLayout android:id="@android:id/tabcontent"
+					android:layout_width="fill_parent" android:layout_height="fill_parent"
+					android:padding="5dp">
 
-		</LinearLayout>
+					<LinearLayout android:id="@+id/tabClock"
+						android:layout_width="fill_parent" android:layout_height="fill_parent"
+						android:orientation="vertical">
+						<TextView android:layout_height="wrap_content"
+							android:text="@string/textActiveTime" android:layout_width="fill_parent"
+							android:paddingTop="10dip" android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-		<TextView android:layout_height="wrap_content" android:text="Start options"
-			android:layout_width="fill_parent"
-			android:id="@+id/textCallNumber" android:paddingTop="20dip"
-			android:paddingBottom="10dip" android:gravity="bottom"
-			android:textAppearance="?android:attr/textAppearanceLarge"
-			>
-			></TextView>
+						<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+							android:layout_width="fill_parent" android:layout_height="wrap_content"
+							android:stretchColumns="1" android:paddingTop="10dip">
 
-		<CheckBox android:layout_width="fill_parent" android:id="@+id/cbStartOnBoot"
-			android:layout_gravity="left" android:text="@string/startOnBoot"
-
-			android:layout_height="wrap_content" android:paddingBottom="10dip"
-			android:drawablePadding="10dip" android:gravity="center_vertical"
-			android:checked="false"></CheckBox>
-
-	
+							<TableRow android:paddingBottom="10dip">
+								<Button android:text="@string/textFrom" android:id="@+id/buttonPickFrom"
+									android:layout_width="wrap_content" android:layout_height="wrap_content"
+									android:layout_column="0" />
+								<TextView android:layout_height="wrap_content"
+									android:id="@+id/textFrom" android:text="9:00"
+									android:layout_width="fill_parent" android:paddingTop="10dip"
+									android:textAppearance="?android:attr/textAppearanceLarge"
+									android:layout_column="1" 
+									android:layout_gravity="center_horizontal" />
 
 
+							</TableRow>
+							<TableRow>
+								<Button android:text="@string/textUntil" android:id="@+id/buttonPickUntil"
+									android:layout_width="wrap_content" android:layout_height="wrap_content"
+									android:layout_column="0" />
+								<TextView android:id="@+id/textUntil"
+									android:layout_height="wrap_content" android:text="21:00"
+									android:layout_width="fill_parent" android:paddingTop="10dip"
+									android:textAppearance="?android:attr/textAppearanceLarge"
+									android:layout_column="1"
+									android:layout_gravity="center_horizontal"  />
 
 
-</LinearLayout>
+							</TableRow>
+						</TableLayout>
+						<TextView android:layout_height="wrap_content"
+							android:text="@string/textRepeat" android:layout_width="fill_parent"
+							android:id="@+id/TextView01" android:paddingTop="10dip"
+							android:paddingBottom="10dip" android:textAppearance="?android:attr/textAppearanceLarge"></TextView>
+						<LinearLayout android:id="@+id/LinearLayout03"
+							android:layout_width="wrap_content" android:layout_height="wrap_content"
+							android:orientation="horizontal">
+							<Spinner android:id="@+id/SpinnerHours"
+								android:layout_width="wrap_content" android:layout_height="wrap_content"></Spinner>
+							<TextView android:layout_height="wrap_content"
+								android:text="@string/textHours" android:textStyle="bold"
+								android:layout_width="fill_parent" android:id="@+id/TextView01"
+								android:paddingTop="10dip" android:paddingRight="30dip"
+								android:paddingBottom="10dip"></TextView>
+
+							<Spinner android:id="@+id/SpinnerMinutes"
+								android:layout_width="wrap_content" android:layout_height="wrap_content"></Spinner>
+							<TextView android:layout_height="wrap_content"
+								android:text="@string/textMinutes" android:textStyle="bold"
+								android:layout_width="fill_parent" android:id="@+id/TextView01"
+								android:paddingTop="10dip" android:paddingBottom="10dip"></TextView>
+
+						</LinearLayout>
+					</LinearLayout>
+
+					<LinearLayout android:id="@+id/tabMessage"
+						android:layout_width="fill_parent" android:layout_height="fill_parent"
+						android:orientation="vertical">
+						<TextView android:layout_height="wrap_content"
+							android:text="@string/textCallNumber" android:textAppearance="?android:attr/textAppearanceLarge"
+							android:layout_width="fill_parent" android:id="@+id/textCallNumber"
+							android:paddingTop="10dip" android:paddingBottom="10dip"></TextView>
+						<LinearLayout android:layout_height="wrap_content"
+							android:layout_width="fill_parent" android:id="@+id/LinearLayout02"
+							android:orientation="horizontal">
+							<Button android:text="@string/buttonPick" android:id="@+id/buttonPick"
+								android:layout_width="wrap_content" android:layout_height="wrap_content"
+								android:paddingRight="10dip"></Button>
+							<EditText android:layout_height="wrap_content"
+								android:text="" android:layout_width="fill_parent" android:id="@+id/textPhone"
+								android:phoneNumber="true"></EditText>
+
+						</LinearLayout>
+					</LinearLayout>
+
+					<LinearLayout android:id="@+id/tabSettings"
+						android:layout_width="fill_parent" android:layout_height="fill_parent"
+						android:orientation="vertical">
+						<TextView android:layout_height="wrap_content"
+							android:text="Start options" android:layout_width="fill_parent"
+							android:id="@+id/textStartOption" android:paddingTop="20dip"
+							android:paddingBottom="10dip" android:gravity="bottom"
+							android:textAppearance="?android:attr/textAppearanceLarge">
+							></TextView>
+
+						<CheckBox android:layout_width="fill_parent" android:id="@+id/cbStartOnBoot"
+							android:layout_gravity="left" android:text="@string/startOnBoot"
+
+							android:layout_height="wrap_content" android:paddingBottom="10dip"
+							android:drawablePadding="10dip" android:gravity="center_vertical"
+							android:checked="false"></CheckBox>
+					</LinearLayout>
+
+
+				</FrameLayout>
+			</LinearLayout>
+		</TabHost>
+	</LinearLayout>
 	<LinearLayout android:layout_width="wrap_content"
 		style="@android:style/ButtonBar" android:layout_height="wrap_content"
 		android:orientation="vertical">
