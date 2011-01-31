@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -33,13 +34,13 @@ public class LiveButton extends TabActivity {
 	private static final String PREF_MINUTE_FROM = "minuteFrom";
 	private static final String PREF_HOUR_UNTIL = "hourUntil";
 	private static final String PREF_MINUTE_UNTIL = "minuteUntil";
-	// private static final String DEBUG_TAG = "LiveButtonActivity";
+	private static final String DEBUG_TAG = "LiveButtonActivity";
 	private static final String PREFS_NAME = "LiveButtonPreferences";
 	private static final int CONTACT_PICKER_RESULT = 1001;
 	private static final int ACKNOWLEDGE_REQUEST_CODE = 1002;
 	private static final int TIME_DIALOG_ID_START = 1;
 	private static final int TIME_DIALOG_ID_STOP = 2;
-
+	
 	private Spinner mSpinHour;
 	private Spinner mSpinMinute;
 	private EditText mPhoneEntry;
@@ -72,7 +73,8 @@ public class LiveButton extends TabActivity {
 			updateDisplay();
 		}
 	};
-	// TODO: Add saving state
+	// TODO: Customize message information
+	// TODO: Get location 
 	// TODO: Add starting on telephone boot
 	// TODO: Add icon on notification bar
 	/** Called when the activity is first created. */
@@ -114,6 +116,14 @@ public class LiveButton extends TabActivity {
 				res.getDrawable(R.drawable.tab_settings)).setContent(
 				R.id.tabSettings));
 
+		setUICallbacks();
+
+	}
+
+	/**
+	 * Set callbacks for UI elements
+	 */
+	private void setUICallbacks() {
 		// button Pick contact
 		Button buttonPick = (Button) findViewById(R.id.buttonPick);
 
@@ -210,7 +220,6 @@ public class LiveButton extends TabActivity {
 			}
 		});
 		readSettings();
-
 	}
 
 	private void updateDisplay() {
@@ -290,14 +299,11 @@ public class LiveButton extends TabActivity {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onActivityResult(int, int,
-	 * android.content.Intent)
+	 * Get the result for tghe phone contact picker activity  
+	 *
 	 */
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// super.onActivityResult(requestCode, resultCode, data);
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {		
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
 			case CONTACT_PICKER_RESULT:
@@ -319,10 +325,10 @@ public class LiveButton extends TabActivity {
 						phone = cursor.getString(phoneIdx);
 
 					} else {
-						// Log.w(DEBUG_TAG, "No results");
+						 Log.w(DEBUG_TAG, "No results");
 					}
 				} catch (Exception e) {
-					// Log.e(DEBUG_TAG, "Failed to get phone data", e);
+					 Log.e(DEBUG_TAG, "Failed to get phone data", e);
 				} finally {
 					if (cursor != null) {
 						cursor.close();
@@ -339,7 +345,7 @@ public class LiveButton extends TabActivity {
 			}
 
 		} else {
-			// Log.w(DEBUG_TAG, "Warning: activity result not ok");
+			Log.w(DEBUG_TAG, "Warning: activity result not ok");
 		}
 	}
 
