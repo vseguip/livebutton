@@ -10,7 +10,9 @@
 		</activity>
 		<receiver android:name="HeartbeatReceiver"></receiver>
 		<activity android:theme="@android:style/Theme" android:name=".AcknowledgeActivity"></activity>
-	</application>
+	
+<service android:name="SendMessageService"></service>
+</application>
 	<uses-sdk android:minSdkVersion="7" />
 
 	<uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
