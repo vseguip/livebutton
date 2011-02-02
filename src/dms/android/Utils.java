@@ -17,8 +17,6 @@ import android.widget.Toast;
 public class Utils {
 	public final static MediaPlayer mediaPlayer = new MediaPlayer();
 
-
-
 	static void stopAlarm() {
 		mediaPlayer.stop();
 	}
@@ -28,12 +26,10 @@ public class Utils {
 
 			// Uri alert =
 			// RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-			Uri alert = RingtoneManager
-					.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+			Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
 			mediaPlayer.reset();
 			mediaPlayer.setDataSource(activity, alert);
-			final AudioManager audioManager = (AudioManager) activity
-					.getSystemService(Context.AUDIO_SERVICE);
+			final AudioManager audioManager = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
 			if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
 				mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
 				mediaPlayer.setLooping(true);
@@ -42,8 +38,7 @@ public class Utils {
 			}
 
 		} catch (Exception ex) {
-			Toast.makeText(activity.getBaseContext(), "Could not play alarm",
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(activity.getBaseContext(), "Could not play alarm", Toast.LENGTH_SHORT).show();
 		}
 	}
 

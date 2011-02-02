@@ -40,6 +40,7 @@ public class SendMessageService extends Service {
 	private BroadcastReceiver mSMSReceiver;
 	private BroadcastReceiver mSMSDelivered;
 	private List<LocationKeeper> mLocKeepers;
+
 	public class LocalBinder extends Binder {
 		SendMessageService getService() {
 			return SendMessageService.this;
@@ -50,27 +51,28 @@ public class SendMessageService extends Service {
 	public void onCreate() {
 		super.onCreate();
 	}
+
 	@Override
 	public void onDestroy() {
-		//unregister receives on destruction
+		// unregister receives on destruction
 		unregisterReceiver(mSMSReceiver);
 		unregisterReceiver(mSMSDelivered);
-		//unregister location managers et. al.
-		for(LocationKeeper k: mLocKeepers) {
+		// unregister location managers et. al.
+		for (LocationKeeper k : mLocKeepers) {
 			k.stopUpdate();
 		}
 	}
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int StartId) {
 		try {
 			final String phoneNumber = intent.getStringExtra("phoneNumber");
 			final String sms = intent.getStringExtra("SMS");
-			
+
 			// Get a list of location keepers (will also update our last known
 			// location
-			final List<LocationKeeper> locs = LocationKeeper
-					.MakeLocationKeepers(this);
-			mLocKeepers=locs;
+			final List<LocationKeeper> locs = LocationKeeper.MakeLocationKeepers(this);
+			mLocKeepers = locs;
 			// get best current location and send it immediately
 			Location loc = LocationKeeper.getCurrentLocation();
 			sendMessage(phoneNumber, sms, loc);
@@ -108,21 +110,15 @@ public class SendMessageService extends Service {
 		String descLoc = "(unknown position)";
 		if (loc != null) {
 			descLoc = // TODO: translate to real address
-			"("
-					+ loc.getProvider()
-					+ ": "
-					+ Location.convert(loc.getLatitude(),
-							Location.FORMAT_DEGREES)
-					+ "º, "
-					+ Location.convert(loc.getLongitude(),
-							Location.FORMAT_DEGREES) + "º)";
+			"(" + loc.getProvider() + ": " + Location.convert(loc.getLatitude(), Location.FORMAT_DEGREES) + "º, "
+					+ Location.convert(loc.getLongitude(), Location.FORMAT_DEGREES) + "º)";
 
 		}
 		if (sms == null)
 			sms = getString(R.string.SMSContent);
 
-		String formattedSms = sms.replaceAll("#position", descLoc).replaceAll(
-				"#time", Calendar.getInstance().getTime().toLocaleString());
+		String formattedSms = sms.replaceAll("#position", descLoc).replaceAll("#time",
+				Calendar.getInstance().getTime().toLocaleString());
 		// List all providers:
 		sendSMS(phoneNumber, formattedSms);
 	}
@@ -136,25 +132,20 @@ public class SendMessageService extends Service {
 			public void onReceive(Context context, Intent intent) {
 				switch (getResultCode()) {
 				case Activity.RESULT_OK:
-					Toast.makeText(context, "SMS sent", Toast.LENGTH_SHORT)
-							.show();
+					Toast.makeText(context, "SMS sent", Toast.LENGTH_SHORT).show();
 
 					break;
 				case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-					Toast.makeText(context, "Generic failure",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(context, "Generic failure", Toast.LENGTH_SHORT).show();
 					break;
 				case SmsManager.RESULT_ERROR_NO_SERVICE:
-					Toast.makeText(context, "No service", Toast.LENGTH_SHORT)
-							.show();
+					Toast.makeText(context, "No service", Toast.LENGTH_SHORT).show();
 					break;
 				case SmsManager.RESULT_ERROR_NULL_PDU:
-					Toast.makeText(context, "Null PDU", Toast.LENGTH_SHORT)
-							.show();
+					Toast.makeText(context, "Null PDU", Toast.LENGTH_SHORT).show();
 					break;
 				case SmsManager.RESULT_ERROR_RADIO_OFF:
-					Toast.makeText(context, "Radio off", Toast.LENGTH_SHORT)
-							.show();
+					Toast.makeText(context, "Radio off", Toast.LENGTH_SHORT).show();
 					break;
 				}
 			}
@@ -166,12 +157,10 @@ public class SendMessageService extends Service {
 			public void onReceive(Context contect, Intent intent) {
 				switch (getResultCode()) {
 				case Activity.RESULT_OK:
-					Toast.makeText(getBaseContext(), "SMS delivered",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getBaseContext(), "SMS delivered", Toast.LENGTH_SHORT).show();
 					break;
 				case Activity.RESULT_CANCELED:
-					Toast.makeText(getBaseContext(), "SMS not delivered",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getBaseContext(), "SMS not delivered", Toast.LENGTH_SHORT).show();
 					break;
 				}
 			}
@@ -179,18 +168,17 @@ public class SendMessageService extends Service {
 		};
 		// ---when the SMS has been delivered---
 		registerReceiver(mSMSDelivered, new IntentFilter(DELIVERED));
-		//partir el mensaje y enviar en trozos ya que algunos telefonos
-		//fallan al enviar mensajes algo largos!
-		SmsManager sms = SmsManager.getDefault();		
+		// partir el mensaje y enviar en trozos ya que algunos telefonos
+		// fallan al enviar mensajes algo largos!
+		SmsManager sms = SmsManager.getDefault();
 		ArrayList<String> mensajes = sms.divideMessage(message);
 		ArrayList<PendingIntent> sentPI = new ArrayList<PendingIntent>();
 		ArrayList<PendingIntent> deliveredPI = new ArrayList<PendingIntent>();
 		for (String msg : mensajes) {
 			sentPI.add(PendingIntent.getBroadcast(this, SMS_SENT_REQUEST_CODE, new Intent(SENT), 0));
-			deliveredPI.add(PendingIntent.getBroadcast(this,SMS_DELIVERED_REQUEST_CODE, new Intent(DELIVERED), 0));
+			deliveredPI.add(PendingIntent.getBroadcast(this, SMS_DELIVERED_REQUEST_CODE, new Intent(DELIVERED), 0));
 		}
-		sms.sendMultipartTextMessage(phoneNumber, null, mensajes,
-				sentPI, deliveredPI);
+		sms.sendMultipartTextMessage(phoneNumber, null, mensajes, sentPI, deliveredPI);
 	}
 
 	@Override

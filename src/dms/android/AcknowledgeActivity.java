@@ -42,7 +42,7 @@ public class AcknowledgeActivity extends Activity implements Runnable {
 	public void run() {
 		countdown--;
 		textCounter.setText(Integer.toString(countdown));
-		if (countdown == 0) {			
+		if (countdown == 0) {
 			countdown = 10;
 			Utils.stopAlarm();
 			Intent newIntent = new Intent(this, SendMessageService.class);
@@ -51,8 +51,7 @@ public class AcknowledgeActivity extends Activity implements Runnable {
 			newIntent.putExtra("SMS", sms);
 			this.startService(newIntent);
 			finish();
-			
-			
+
 		} else {
 			handler.postDelayed(this, 1000);
 		}

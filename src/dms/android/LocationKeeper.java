@@ -9,7 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
-public class LocationKeeper  {
+public class LocationKeeper {
 	private static final int MAX_METERS = 5;
 	private static final String LOCATION_KEEPER = "LocationKeeper";
 	// Access through getter function
@@ -51,8 +51,7 @@ public class LocationKeeper  {
 	 *            The current Location fix, to which you want to compare the new
 	 *            one
 	 */
-	protected static boolean isBetterLocation(Location location,
-			Location currentBestLocation) {
+	protected static boolean isBetterLocation(Location location, Location currentBestLocation) {
 		if (currentBestLocation == null) {
 			// A new location is always better than no location
 			return true;
@@ -61,8 +60,8 @@ public class LocationKeeper  {
 			// No location is worse than any location
 			return false;
 		}
-		//If near old location don't bother changing it
-		if(location.distanceTo(currentBestLocation)<MAX_METERS){
+		// If near old location don't bother changing it
+		if (location.distanceTo(currentBestLocation) < MAX_METERS) {
 			return false;
 		}
 		// Check whether the new location fix is newer or older1
@@ -83,15 +82,13 @@ public class LocationKeeper  {
 		}
 
 		// Check whether the new location fix is more or less accurate
-		int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation
-				.getAccuracy());
+		int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation.getAccuracy());
 		boolean isLessAccurate = accuracyDelta > 0;
 		boolean isMoreAccurate = accuracyDelta < 0;
 		boolean isSignificantlyLessAccurate = accuracyDelta > 200;
 
 		// Check if the old and new location are from the same provider
-		boolean isFromSameProvider = isSameProvider(location.getProvider(),
-				currentBestLocation.getProvider());
+		boolean isFromSameProvider = isSameProvider(location.getProvider(), currentBestLocation.getProvider());
 
 		// Determine location quality using a combination of timeliness and
 		// accuracy
@@ -99,8 +96,7 @@ public class LocationKeeper  {
 			return true;
 		} else if (isNewer && !isLessAccurate) {
 			return true;
-		} else if (isNewer && !isSignificantlyLessAccurate
-				&& isFromSameProvider) {
+		} else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
 			return true;
 		}
 		return false;
@@ -114,11 +110,9 @@ public class LocationKeeper  {
 		return provider1.equals(provider2);
 	}
 
-	
 	// Factory method
 	public static List<LocationKeeper> MakeLocationKeepers(Context context) {
-		LocationManager locationManager = (LocationManager) context
-				.getSystemService(Context.LOCATION_SERVICE);
+		LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		List<LocationKeeper> keepers = new ArrayList<LocationKeeper>();
 		List<String> providers = locationManager.getAllProviders();
 		// Instantiate a listener for every provider. While we are at it, check
@@ -134,7 +128,6 @@ public class LocationKeeper  {
 	private LocationManager mLocationManager = null;
 	private LiveButtonLocationListener mListener;
 
-
 	// Don't construct outside factory
 	private LocationKeeper(LocationManager locationManager, String provider) {
 		mProvider = provider;
@@ -142,18 +135,17 @@ public class LocationKeeper  {
 		checkAndSetLocation(mLocationManager.getLastKnownLocation(provider));
 	}
 
-
 	public void startUpdate(Runnable newFixCallback, Runnable eventCallback) {
 		mListener = new LiveButtonLocationListener(this, newFixCallback, eventCallback);
 		mLocationManager.requestLocationUpdates(mProvider, 0, 0, mListener);
 	}
 
-	public void stopUpdate() {	
+	public void stopUpdate() {
 		mLocationManager.removeUpdates(mListener);
 	}
-	
+
 	public void stopUpdate(LiveButtonLocationListener listener) {
-		
+
 		mLocationManager.removeUpdates(listener);
 	}
 
