@@ -37,7 +37,9 @@ public class SendMessageService extends Service {
 	public final static int SMS_DELIVERED_REQUEST_CODE = 1006;
 	public int mNProviders;
 	private final IBinder mBinder = new LocalBinder();
-
+	private BroadcastReceiver mSMSReceiver;
+	private BroadcastReceiver mSMSDelivered;
+	private List<LocationKeeper> mLocKeepers;
 	public class LocalBinder extends Binder {
 		SendMessageService getService() {
 			return SendMessageService.this;
@@ -48,16 +50,30 @@ public class SendMessageService extends Service {
 	public void onCreate() {
 		super.onCreate();
 	}
-
+	@Override
+	public void onDestroy() {
+		//unregister receives on destruction
+		unregisterReceiver(mSMSReceiver);
+		unregisterReceiver(mSMSDelivered);
+		//unregister location managers et. al.
+		for(LocationKeeper k: mLocKeepers) {
+			k.stopUpdate();
+		}
+	}
 	@Override
 	public int onStartCommand(Intent intent, int flags, int StartId) {
 		try {
 			final String phoneNumber = intent.getStringExtra("phoneNumber");
 			final String sms = intent.getStringExtra("SMS");
+			
 			// Get a list of location keepers (will also update our last known
 			// location
 			final List<LocationKeeper> locs = LocationKeeper
 					.MakeLocationKeepers(this);
+			mLocKeepers=locs;
+			// get best current location and send it immediately
+			Location loc = LocationKeeper.getCurrentLocation();
+			sendMessage(phoneNumber, sms, loc);
 			// start a listener for each of them
 			// will deregister updates for each provider once
 			// it gets the first fix and then send an SMS if it's a better
@@ -81,9 +97,7 @@ public class SendMessageService extends Service {
 					}
 				});
 			}
-			// get best current location and send it immediately
-			Location loc = LocationKeeper.getCurrentLocation();
-			sendMessage(phoneNumber, sms, loc);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -117,8 +131,7 @@ public class SendMessageService extends Service {
 		String SENT = "SMS_SENT";
 		String DELIVERED = "SMS_DELIVERED";
 
-		// ---when the SMS has been sent---
-		registerReceiver(new BroadcastReceiver() {
+		mSMSReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				switch (getResultCode()) {
@@ -145,10 +158,10 @@ public class SendMessageService extends Service {
 					break;
 				}
 			}
-		}, new IntentFilter(SENT));
-
-		// ---when the SMS has been delivered---
-		registerReceiver(new BroadcastReceiver() {
+		};
+		// ---when the SMS has been sent---
+		registerReceiver(mSMSReceiver, new IntentFilter(SENT));
+		mSMSDelivered = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context contect, Intent intent) {
 				switch (getResultCode()) {
@@ -163,7 +176,9 @@ public class SendMessageService extends Service {
 				}
 			}
 
-		}, new IntentFilter(DELIVERED));
+		};
+		// ---when the SMS has been delivered---
+		registerReceiver(mSMSDelivered, new IntentFilter(DELIVERED));
 		//partir el mensaje y enviar en trozos ya que algunos telefonos
 		//fallan al enviar mensajes algo largos!
 		SmsManager sms = SmsManager.getDefault();		

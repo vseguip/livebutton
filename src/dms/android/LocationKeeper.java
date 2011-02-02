@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.util.Log;
 
 public class LocationKeeper  {
+	private static final int MAX_METERS = 5;
 	private static final String LOCATION_KEEPER = "LocationKeeper";
 	// Access through getter function
 	private static Location bestKnownLocation;
@@ -58,6 +59,10 @@ public class LocationKeeper  {
 		}
 		if (location == null) {
 			// No location is worse than any location
+			return false;
+		}
+		//If near old location don't bother changing it
+		if(location.distanceTo(currentBestLocation)<MAX_METERS){
 			return false;
 		}
 		// Check whether the new location fix is newer or older1
@@ -127,6 +132,7 @@ public class LocationKeeper  {
 
 	private String mProvider;
 	private LocationManager mLocationManager = null;
+	private LiveButtonLocationListener mListener;
 
 
 	// Don't construct outside factory
@@ -138,11 +144,16 @@ public class LocationKeeper  {
 
 
 	public void startUpdate(Runnable newFixCallback, Runnable eventCallback) {
-		mLocationManager.requestLocationUpdates(mProvider, 0, 0,
-				new LiveButtonLocationListener(this, newFixCallback, eventCallback));
+		mListener = new LiveButtonLocationListener(this, newFixCallback, eventCallback);
+		mLocationManager.requestLocationUpdates(mProvider, 0, 0, mListener);
 	}
 
+	public void stopUpdate() {	
+		mLocationManager.removeUpdates(mListener);
+	}
+	
 	public void stopUpdate(LiveButtonLocationListener listener) {
+		
 		mLocationManager.removeUpdates(listener);
 	}
 

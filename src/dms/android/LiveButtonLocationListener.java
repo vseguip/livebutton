@@ -17,9 +17,9 @@ public class LiveButtonLocationListener implements LocationListener {
 	}
 	public void onLocationChanged(Location location) {	
 		if (LocationKeeper.checkAndSetLocation(location)) {					
-			mLocKeeper.stopUpdate(this);
 			mNewFixCallback.run(); //run new fix callback from service
-		}		
+		}	
+		mLocKeeper.stopUpdate(this);
 		//run callback from service even if not new fix so we can deregister and stop
 		mEventCallback.run(); 
 	}
