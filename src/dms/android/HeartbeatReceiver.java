@@ -11,8 +11,10 @@ public class HeartbeatReceiver extends BroadcastReceiver {
 		
 		 Intent newIntent = new Intent(context, AcknowledgeActivity.class);	     
 	     newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	     String phoneNumber = intent.getStringExtra("phoneNumber");
-	     newIntent.putExtra("phoneNumber", phoneNumber);
+	     String phoneNumber = intent.getStringExtra(LiveButton.PREF_PHONE_NUMBER);
+	     String sms = intent.getStringExtra(LiveButton.PREF_SMS_CONTENT);
+	     newIntent.putExtra(LiveButton.PREF_PHONE_NUMBER, phoneNumber);
+	     newIntent.putExtra(LiveButton.PREF_SMS_CONTENT, sms);
 	     context.startActivity(newIntent);	       
 	}
 

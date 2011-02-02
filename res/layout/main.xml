@@ -23,7 +23,7 @@
 						android:orientation="vertical">
 						<TextView android:layout_height="wrap_content"
 							android:text="@string/textActiveTime" android:layout_width="fill_parent"
-							android:paddingTop="10dip" android:textAppearance="?android:attr/textAppearanceLarge"/>
+							android:paddingTop="10dip" android:textAppearance="?android:attr/textAppearanceLarge" />
 
 						<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
 							android:layout_width="fill_parent" android:layout_height="wrap_content"
@@ -37,8 +37,7 @@
 									android:id="@+id/textFrom" android:text="9:00"
 									android:layout_width="fill_parent" android:paddingTop="10dip"
 									android:textAppearance="?android:attr/textAppearanceLarge"
-									android:layout_column="1" 
-									android:layout_gravity="center_horizontal" />
+									android:layout_column="1" android:layout_gravity="center_horizontal" />
 
 
 							</TableRow>
@@ -50,8 +49,7 @@
 									android:layout_height="wrap_content" android:text="21:00"
 									android:layout_width="fill_parent" android:paddingTop="10dip"
 									android:textAppearance="?android:attr/textAppearanceLarge"
-									android:layout_column="1"
-									android:layout_gravity="center_horizontal"  />
+									android:layout_column="1" android:layout_gravity="center_horizontal" />
 
 
 							</TableRow>
@@ -99,6 +97,16 @@
 								android:phoneNumber="true"></EditText>
 
 						</LinearLayout>
+						<TextView android:layout_height="wrap_content"
+							android:text="@string/textMessageToSend" 
+							android:textAppearance="?android:attr/textAppearanceLarge"
+							android:layout_width="fill_parent" 
+							android:paddingTop="10dip" android:paddingBottom="10dip" />
+						<EditText android:text="@string/SMSContent" android:layout_width="fill_parent"
+							android:layout_height="fill_parent" 
+							android:id="@+id/SMSContent"
+							android:gravity="top"
+							android:maxLength="255" />
 					</LinearLayout>
 
 					<LinearLayout android:id="@+id/tabSettings"

@@ -26,7 +26,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class LiveButton extends TabActivity {
-	private static final String PREF_PHONE_NUMBER = "phoneNumber";
+	public static final String PREF_SMS_CONTENT = "SMS";
+	public static final String PREF_PHONE_NUMBER = "phoneNumber";
 	private static final String PREF_MINUTES_REPEAT = "minutesRepeat";
 	private static final String PREF_HOURS_REPEAT = "hoursRepeat";
 	private static final String PREF_START_ON_BOOT = "startOnBoot";
@@ -44,6 +45,7 @@ public class LiveButton extends TabActivity {
 	private Spinner mSpinHour;
 	private Spinner mSpinMinute;
 	private EditText mPhoneEntry;
+	private EditText mSMSContent;
 	private CheckBox mCbStartOnBoot;
 	private PendingIntent mSender;
 	private SharedPreferences mSettings;
@@ -73,6 +75,7 @@ public class LiveButton extends TabActivity {
 			updateDisplay();
 		}
 	};
+	
 	// TODO: Customize message information
 	// TODO: Get location 
 	// TODO: Add starting on telephone boot
@@ -86,6 +89,7 @@ public class LiveButton extends TabActivity {
 		mSettings = getSharedPreferences(PREFS_NAME, 0);
 		// controls
 		mPhoneEntry = (EditText) findViewById(R.id.textPhone);
+		mSMSContent = (EditText) findViewById(R.id.SMSContent);
 		mSpinHour = (Spinner) findViewById(R.id.SpinnerHours);
 		mSpinMinute = (Spinner) findViewById(R.id.SpinnerMinutes);
 		mCbStartOnBoot = (CheckBox) findViewById(R.id.cbStartOnBoot);
@@ -137,17 +141,19 @@ public class LiveButton extends TabActivity {
 			}
 		});
 
-		Button buttonActivar = (Button) findViewById(R.id.buttonStart);
-		buttonActivar.setOnClickListener(new OnClickListener() {
+		Button buttonStart = (Button) findViewById(R.id.buttonStart);
+		buttonStart.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// schedule alarm
 				String phoneNumber = mPhoneEntry.getText().toString();
+				String SMS = mSMSContent.getText().toString();
 				if (phoneNumber.length() > 0) {
 					Intent intent = new Intent(LiveButton.this,
 							HeartbeatReceiver.class);
 					intent.putExtra(PREF_PHONE_NUMBER, phoneNumber);
+					intent.putExtra(PREF_SMS_CONTENT, SMS);
 					mSender = PendingIntent.getBroadcast(LiveButton.this,
 							ACKNOWLEDGE_REQUEST_CODE, intent,
 							PendingIntent.FLAG_UPDATE_CURRENT);
@@ -164,6 +170,9 @@ public class LiveButton extends TabActivity {
 								System.currentTimeMillis() + 1000, interval,
 								mSender);
 						writeSettings();
+						Toast.makeText(LiveButton.this,
+								"Live button monitor started",
+								Toast.LENGTH_SHORT).show();
 					} else {
 						Toast
 								.makeText(
@@ -192,10 +201,14 @@ public class LiveButton extends TabActivity {
 
 					mSender = PendingIntent.getBroadcast(LiveButton.this,
 							ACKNOWLEDGE_REQUEST_CODE, intent,
-							PendingIntent.FLAG_UPDATE_CURRENT);
+							PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_NO_CREATE);
+				
 					AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-					alarmManager.cancel(mSender);
+					alarmManager.cancel(mSender);				
 					mSender = null;
+					Toast.makeText(LiveButton.this,
+							"Live button monitor stopped.",
+							Toast.LENGTH_SHORT).show();
 				} catch (Exception e) {
 					Toast.makeText(LiveButton.this,
 							"Live button monitor not started.",
@@ -275,6 +288,8 @@ public class LiveButton extends TabActivity {
 		// call details
 		String phoneNumber = mSettings.getString(PREF_PHONE_NUMBER, "");
 		mPhoneEntry.setText(phoneNumber);
+		String SMS = mSettings.getString(PREF_SMS_CONTENT, getText(R.string.SMSContent).toString());
+		mSMSContent.setText(SMS);
 		
 	}
 
@@ -295,6 +310,7 @@ public class LiveButton extends TabActivity {
 		
 		// call details
 		editor.putString(PREF_PHONE_NUMBER, mPhoneEntry.getText().toString());
+		editor.putString(PREF_SMS_CONTENT, mSMSContent.getText().toString());
 		editor.commit();
 	}
 
