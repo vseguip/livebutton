@@ -1,5 +1,8 @@
 package dms.android;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -26,19 +29,20 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class LiveButton extends TabActivity {
+	public static final String PREF_INTERVAL_MILLIS = "intervalMillis";
 	public static final String PREF_SMS_CONTENT = "SMS";
 	public static final String PREF_PHONE_NUMBER = "phoneNumber";
 	private static final String PREF_MINUTES_REPEAT = "minutesRepeat";
 	private static final String PREF_HOURS_REPEAT = "hoursRepeat";
 	private static final String PREF_START_ON_BOOT = "startOnBoot";
-	private static final String PREF_HOUR_FROM = "hourFrom";
-	private static final String PREF_MINUTE_FROM = "minuteFrom";
-	private static final String PREF_HOUR_UNTIL = "hourUntil";
-	private static final String PREF_MINUTE_UNTIL = "minuteUntil";
+	public static final String PREF_HOUR_FROM = "hourFrom";
+	public static final String PREF_MINUTE_FROM = "minuteFrom";
+	public static final String PREF_HOUR_UNTIL = "hourUntil";
+	public static final String PREF_MINUTE_UNTIL = "minuteUntil";
 	private static final String DEBUG_TAG = "LiveButtonActivity";
-	private static final String PREFS_NAME = "LiveButtonPreferences";
+	public static final String PREFS_NAME = "LiveButtonPreferences";
 	private static final int CONTACT_PICKER_RESULT = 1001;
-	private static final int ACKNOWLEDGE_REQUEST_CODE = 1002;
+	static final int ACKNOWLEDGE_REQUEST_CODE = 1002;
 	private static final int TIME_DIALOG_ID_START = 1;
 	private static final int TIME_DIALOG_ID_STOP = 2;
 
@@ -143,18 +147,24 @@ public class LiveButton extends TabActivity {
 				String phoneNumber = mPhoneEntry.getText().toString();
 				String SMS = mSMSContent.getText().toString();
 				if (phoneNumber.length() > 0) {
-					Intent intent = new Intent(LiveButton.this, HeartbeatReceiver.class);
-					intent.putExtra(PREF_PHONE_NUMBER, phoneNumber);
-					intent.putExtra(PREF_SMS_CONTENT, SMS);
-					mSender = PendingIntent.getBroadcast(LiveButton.this, ACKNOWLEDGE_REQUEST_CODE, intent,
-							PendingIntent.FLAG_UPDATE_CURRENT);
 
 					AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 					int hours = Integer.parseInt(mSpinHour.getSelectedItem().toString());
 					int minutes = Integer.parseInt(mSpinMinute.getSelectedItem().toString());
 					long interval = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000);
-					if (interval > 0) {
-						alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, interval,
+					
+					if (interval > 0) {						
+						Intent intent = new Intent(LiveButton.this, HeartbeatReceiver.class);
+						intent.putExtra(PREF_PHONE_NUMBER, phoneNumber);
+						intent.putExtra(PREF_SMS_CONTENT, SMS);
+						intent.putExtra(PREF_INTERVAL_MILLIS, interval);
+						mSender = PendingIntent.getBroadcast(LiveButton.this, ACKNOWLEDGE_REQUEST_CODE, intent,
+								PendingIntent.FLAG_UPDATE_CURRENT);
+
+						Date dia =Calendar.getInstance().getTime();
+						dia.setHours(mHourFrom);
+						dia.setMinutes(mMinuteFrom);
+						alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, dia.getTime(), interval,
 								mSender);
 						writeSettings();
 						Toast.makeText(LiveButton.this, "Live button monitor started", Toast.LENGTH_SHORT).show();
