@@ -1,4 +1,4 @@
-package dms.android;
+package com.livebutton;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
