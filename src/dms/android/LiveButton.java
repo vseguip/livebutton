@@ -45,7 +45,6 @@ public class LiveButton extends TabActivity {
 	private SharedPreferences mSettings;
 	private TextView mTextFrom;
 	private TextView mTextUntil;
-	private String mCountdown;
 
 	private int mHourFrom;
 	private int mMinuteFrom;
@@ -142,16 +141,14 @@ public class LiveButton extends TabActivity {
 				// schedule alarm
 				Log.i(LOG_TAG, "User clicked start");
 				String phoneNumber = mPhoneEntry.getText().toString();
-				String SMS = mSMSContent.getText().toString();
 				if (phoneNumber.length() > 0) {
-
-					AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 					int hours = Integer.parseInt(mSpinHour.getSelectedItem().toString());
 					int minutes = Integer.parseInt(mSpinMinute.getSelectedItem().toString());
 					long interval = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000);
-
 					if (interval > 0) {
-						Log.i(LOG_TAG, "Scheduloing alarm");
+						Log.i(LOG_TAG, "Scheduling alarm");
+						writeSettings();
+						AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 						Intent intent = new Intent(LiveButton.this, HeartbeatReceiver.class);
 						mSender = PendingIntent.getBroadcast(LiveButton.this, ACKNOWLEDGE_REQUEST_CODE, intent,
 								PendingIntent.FLAG_UPDATE_CURRENT);
@@ -160,19 +157,21 @@ public class LiveButton extends TabActivity {
 						day.setMinutes(mMinuteFrom);
 						day.setSeconds(0);
 						alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, day.getTime(), interval, mSender);
-						writeSettings();
+
 						Log.i(LOG_TAG, "Live button monitor started");
 						Toast.makeText(LiveButton.this, "Live button monitor started", Toast.LENGTH_SHORT).show();
 					} else {
 						Log.i(LOG_TAG, "No valid interval when starting alarm");
-						Toast.makeText(
+						Toast
+								.makeText(
 										LiveButton.this,
 										"You have to select a valid interval (one of the hour or minute field must be greater than zero).",
 										Toast.LENGTH_SHORT).show();
 					}
 				} else {
 					Log.i(LOG_TAG, "No phone selected, can't schedule wakeup");
-					Toast.makeText(LiveButton.this, "No phone selected, can't schedule wakeup", Toast.LENGTH_SHORT).show();
+					Toast.makeText(LiveButton.this, "No phone selected, can't schedule wakeup", Toast.LENGTH_SHORT)
+							.show();
 				}
 
 			}
@@ -296,7 +295,7 @@ public class LiveButton extends TabActivity {
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
+
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
 			case CONTACT_PICKER_RESULT:
