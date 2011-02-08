@@ -12,6 +12,7 @@
 		<activity android:theme="@android:style/Theme" android:name=".AcknowledgeActivity"></activity>
 	
 <service android:name="SendMessageService"></service>
+<activity android:name="SettingsActivity"></activity>
 </application>
 	<uses-sdk android:minSdkVersion="7" />
 

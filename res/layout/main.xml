@@ -109,7 +109,7 @@
 							android:maxLength="255" />
 					</LinearLayout>
 
-					<LinearLayout android:id="@+id/tabSettings"
+					<!-- <LinearLayout android:id="@+id/tabSettings"
 						android:layout_width="fill_parent" android:layout_height="fill_parent"
 						android:orientation="vertical">
 						<TextView android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
 							android:layout_height="wrap_content" android:paddingBottom="10dip"
 							android:drawablePadding="10dip" android:gravity="center_vertical"
 							android:checked="false"></CheckBox>
-					</LinearLayout>
+					</LinearLayout>-->
 
 
 				</FrameLayout>

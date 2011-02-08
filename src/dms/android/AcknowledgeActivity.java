@@ -17,15 +17,18 @@ public class AcknowledgeActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.acknowledge);
-		final String phoneNumber = getIntent().getStringExtra(LiveButton.PREF_PHONE_NUMBER);
-		final String sms = getIntent().getStringExtra(LiveButton.PREF_SMS_CONTENT);
+		final String phoneNumber = getIntent().getStringExtra(getString(R.string.phoneNumberPref));
+		final String sms = getIntent().getStringExtra(getString(R.string.SMSContentPref));
+		int countdown = getIntent().getIntExtra(getString(R.string.countDownTimerPref),10);
+		if (countdown < 1)
+			countdown = 10;
 		final TextView textCounter = (TextView) findViewById(R.id.timeRemaining);
-		textCounter.setText("10");
+		textCounter.setText(Integer.toString(countdown));
 		Utils.playAlarm(this);
-		final CountDownTimer timer = new CountDownTimer(10000, 1000) {
+		final CountDownTimer timer = new CountDownTimer(countdown * 1000, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
-				textCounter.setText(Long.toString(millisUntilFinished/1000));
+				textCounter.setText(Long.toString(millisUntilFinished / 1000));
 			}
 
 			@Override

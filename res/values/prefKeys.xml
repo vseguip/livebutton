@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="intervalMillisPref">"intervalMillis</string>
+    <string name="SMSContentPref">SMSContent</string>
+	<string name="phoneNumberPref">phoneNumber"</string>
+	<string name="minutesRepeatPref">minutesRepeat</string>
+	<string name="hoursRepeatPref">hoursRepeat</string>
+	<string name="hourFromPref">hourFrom</string>
+	<string name="minuteFromPref">minuteFrom</string>
+	<string name="hourUntilPref">hourUntil</string>
+	<string name="minuteUntilPref">minuteUntil</string>
+	<string name="countDownTimerPref">countDownTimer</string>
+	<string name="startOnBootPref">startOnBoot</string>
+	<string name="ringtonePref">ringtonePref</string>
+	</resources>

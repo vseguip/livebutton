@@ -14,6 +14,8 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
 import android.view.View;
@@ -29,33 +31,24 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class LiveButton extends TabActivity {
-	public static final String PREF_INTERVAL_MILLIS = "intervalMillis";
-	public static final String PREF_SMS_CONTENT = "SMS";
-	public static final String PREF_PHONE_NUMBER = "phoneNumber";
-	private static final String PREF_MINUTES_REPEAT = "minutesRepeat";
-	private static final String PREF_HOURS_REPEAT = "hoursRepeat";
-	private static final String PREF_START_ON_BOOT = "startOnBoot";
-	public static final String PREF_HOUR_FROM = "hourFrom";
-	public static final String PREF_MINUTE_FROM = "minuteFrom";
-	public static final String PREF_HOUR_UNTIL = "hourUntil";
-	public static final String PREF_MINUTE_UNTIL = "minuteUntil";
+
 	private static final String DEBUG_TAG = "LiveButtonActivity";
-	public static final String PREFS_NAME = "LiveButtonPreferences";
+	//public static final String PREFS_NAME = "LiveButtonPreferences";
 	private static final int CONTACT_PICKER_RESULT = 1001;
 	static final int ACKNOWLEDGE_REQUEST_CODE = 1002;
 	private static final int TIME_DIALOG_ID_START = 1;
-	private static final int TIME_DIALOG_ID_STOP = 2;
+	private static final int TIME_DIALOG_ID_STOP = 2;	
 
 	private Spinner mSpinHour;
 	private Spinner mSpinMinute;
 	private EditText mPhoneEntry;
 	private EditText mSMSContent;
-	private CheckBox mCbStartOnBoot;
 	private PendingIntent mSender;
 	private SharedPreferences mSettings;
 	private TextView mTextFrom;
 	private TextView mTextUntil;
-
+	private String mCountdown;
+	
 	private int mHourFrom;
 	private int mMinuteFrom;
 
@@ -88,13 +81,14 @@ public class LiveButton extends TabActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		// settings singleton
-		mSettings = getSharedPreferences(PREFS_NAME, 0);
+		
+		mSettings = PreferenceManager.getDefaultSharedPreferences(this);//getSharedPreferences(PREFS_NAME, 0);
 		// controls
 		mPhoneEntry = (EditText) findViewById(R.id.textPhone);
 		mSMSContent = (EditText) findViewById(R.id.SMSContent);
 		mSpinHour = (Spinner) findViewById(R.id.SpinnerHours);
 		mSpinMinute = (Spinner) findViewById(R.id.SpinnerMinutes);
-		mCbStartOnBoot = (CheckBox) findViewById(R.id.cbStartOnBoot);
+		//mCbStartOnBoot = (CheckBox) findViewById(R.id.cbStartOnBoot);
 		mTextFrom = (TextView) findViewById(R.id.textFrom);
 		mTextUntil = (TextView) findViewById(R.id.textUntil);
 		// fill controls
@@ -115,9 +109,8 @@ public class LiveButton extends TabActivity {
 				.setContent(R.id.tabClock));
 		tabHost.addTab(tabHost.newTabSpec("Message").setIndicator("Message", res.getDrawable(R.drawable.tab_message))
 				.setContent(R.id.tabMessage));
-		tabHost.addTab(tabHost.newTabSpec("Settings")
-				.setIndicator("Settings", res.getDrawable(R.drawable.tab_settings)).setContent(R.id.tabSettings));
-
+		tabHost.addTab(tabHost.newTabSpec("Settings").setIndicator("Settings", res.getDrawable(R.drawable.tab_settings)).
+				setContent(new Intent(this,SettingsActivity.class)));
 		setUICallbacks();
 
 	}
@@ -142,7 +135,7 @@ public class LiveButton extends TabActivity {
 		buttonStart.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v) {				
 				// schedule alarm
 				String phoneNumber = mPhoneEntry.getText().toString();
 				String SMS = mSMSContent.getText().toString();
@@ -155,9 +148,11 @@ public class LiveButton extends TabActivity {
 					
 					if (interval > 0) {						
 						Intent intent = new Intent(LiveButton.this, HeartbeatReceiver.class);
-						intent.putExtra(PREF_PHONE_NUMBER, phoneNumber);
-						intent.putExtra(PREF_SMS_CONTENT, SMS);
-						intent.putExtra(PREF_INTERVAL_MILLIS, interval);
+						//TODO: delete!
+//						intent.putExtra(PREF_PHONE_NUMBER, phoneNumber);
+//						intent.putExtra(PREF_SMS_CONTENT, SMS);
+//						intent.putExtra(PREF_INTERVAL_MILLIS, interval);
+//						intent.putExtra(PREF_COUNTDOWN, mCountdown);
 						mSender = PendingIntent.getBroadcast(LiveButton.this, ACKNOWLEDGE_REQUEST_CODE, intent,
 								PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -247,27 +242,25 @@ public class LiveButton extends TabActivity {
 	}
 
 	private void readSettings() {
-		// Rescue saved preferences
-		// Start on boot
-		boolean startOnBoot = mSettings.getBoolean(PREF_START_ON_BOOT, false);
-		mCbStartOnBoot.setChecked(startOnBoot);
+		// Rescue saved preferences			
 		// Time
-		int hours = mSettings.getInt(PREF_HOURS_REPEAT, 0);
-		int minutes = mSettings.getInt(PREF_MINUTES_REPEAT, 0);
+		
+		int hours = mSettings.getInt(getString(R.string.hoursRepeatPref), 0);
+		int minutes = mSettings.getInt(getString(R.string.minutesRepeatPref), 0);
 		mSpinHour.setSelection(hours);
 		mSpinMinute.setSelection(minutes);
 		// Start time
-		mHourFrom = mSettings.getInt(PREF_HOUR_FROM, 9);
-		mMinuteFrom = mSettings.getInt(PREF_MINUTE_FROM, 0);
+		mHourFrom = mSettings.getInt(getString(R.string.hourFromPref), 9);
+		mMinuteFrom = mSettings.getInt(getString(R.string.minuteFromPref), 0);
 		// Stop time
-		mHourUntil = mSettings.getInt(PREF_HOUR_UNTIL, 21);
-		mMinuteUntil = mSettings.getInt(PREF_MINUTE_UNTIL, 0);
+		mHourUntil = mSettings.getInt(getString(R.string.hourUntilPref), 21);
+		mMinuteUntil = mSettings.getInt(getString(R.string.minuteUntilPref), 0);
 		// Refresh view
 		updateDisplay();
 		// call details
-		String phoneNumber = mSettings.getString(PREF_PHONE_NUMBER, "");
+		String phoneNumber = mSettings.getString(getString(R.string.phoneNumberPref), "");
 		mPhoneEntry.setText(phoneNumber);
-		String SMS = mSettings.getString(PREF_SMS_CONTENT, getText(R.string.SMSContent).toString());
+		String SMS = mSettings.getString(getString(R.string.SMSContentPref), getString(R.string.SMSContent));
 		mSMSContent.setText(SMS);
 
 	}
@@ -276,20 +269,20 @@ public class LiveButton extends TabActivity {
 		// Save preferences
 		SharedPreferences.Editor editor = mSettings.edit();
 		// Start on boot
-		editor.putBoolean(PREF_START_ON_BOOT, mCbStartOnBoot.isChecked());
 		// Time
-		editor.putInt(PREF_HOURS_REPEAT, mSpinHour.getSelectedItemPosition());
-		editor.putInt(PREF_MINUTES_REPEAT, mSpinMinute.getSelectedItemPosition());
+		editor.putInt(getString(R.string.hoursRepeatPref), mSpinHour.getSelectedItemPosition());
+		editor.putInt(getString(R.string.minutesRepeatPref), mSpinMinute.getSelectedItemPosition());
 		// Start time
-		editor.putInt(PREF_HOUR_FROM, mHourFrom);
-		editor.putInt(PREF_MINUTE_FROM, mMinuteFrom);
+		editor.putInt(getString(R.string.hourFromPref), mHourFrom);
+		editor.putInt(getString(R.string.minuteFromPref), mMinuteFrom);
 		// Stop time
-		editor.putInt(PREF_HOUR_UNTIL, mHourUntil);
-		editor.putInt(PREF_MINUTE_UNTIL, mMinuteUntil);
+		editor.putInt(getString(R.string.hourUntilPref), mHourUntil);
+		editor.putInt(getString(R.string.minuteUntilPref), mMinuteUntil);
 
 		// call details
-		editor.putString(PREF_PHONE_NUMBER, mPhoneEntry.getText().toString());
-		editor.putString(PREF_SMS_CONTENT, mSMSContent.getText().toString());
+		editor.putString(getString(R.string.phoneNumberPref), mPhoneEntry.getText().toString());
+		editor.putString(getString(R.string.SMSContentPref), mSMSContent.getText().toString());
+		
 		editor.commit();
 	}
 
