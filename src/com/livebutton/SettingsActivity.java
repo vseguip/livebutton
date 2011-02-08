@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class SettingsActivity extends PreferenceActivity {
 		
-		private static final String LOG_TAG = "SettignsActivity";
+		private static final String LOG_TAG = "SettingsActivity";
 
 		@Override
 	   protected void onCreate(Bundle savedInstanceState) {

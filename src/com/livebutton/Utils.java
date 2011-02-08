@@ -19,9 +19,6 @@ public class Utils {
 
 	static void playAlarm(Activity activity, String ringtone) {
 		try {
-
-			// Uri alert =
-			// RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 			Log.i(LOG_TAG, "Playing alarm: " + ringtone);
 			Uri alert;
 			try {
@@ -32,7 +29,7 @@ public class Utils {
 				mediaPlayer.reset();
 				mediaPlayer.setDataSource(activity, alert);
 			} catch (Exception ex) {
-				// some error on the ringtone occurred, try with the defautl one
+				// some error on the ringtone occurred, try with the default one
 				Log.e(LOG_TAG, Log.getStackTraceString(ex));
 				alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
 				mediaPlayer.reset();
