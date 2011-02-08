@@ -15,14 +15,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TabHost;
@@ -32,12 +30,12 @@ import android.widget.Toast;
 
 public class LiveButton extends TabActivity {
 
-	private static final String DEBUG_TAG = "LiveButtonActivity";
-	//public static final String PREFS_NAME = "LiveButtonPreferences";
+	private static final String LOG_TAG = "LiveButtonActivity";
+	// public static final String PREFS_NAME = "LiveButtonPreferences";
 	private static final int CONTACT_PICKER_RESULT = 1001;
 	static final int ACKNOWLEDGE_REQUEST_CODE = 1002;
 	private static final int TIME_DIALOG_ID_START = 1;
-	private static final int TIME_DIALOG_ID_STOP = 2;	
+	private static final int TIME_DIALOG_ID_STOP = 2;
 
 	private Spinner mSpinHour;
 	private Spinner mSpinMinute;
@@ -48,7 +46,7 @@ public class LiveButton extends TabActivity {
 	private TextView mTextFrom;
 	private TextView mTextUntil;
 	private String mCountdown;
-	
+
 	private int mHourFrom;
 	private int mMinuteFrom;
 
@@ -79,16 +77,17 @@ public class LiveButton extends TabActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.i(LOG_TAG, "Creating LiveButtonActivity");
 		setContentView(R.layout.main);
 		// settings singleton
-		
-		mSettings = PreferenceManager.getDefaultSharedPreferences(this);//getSharedPreferences(PREFS_NAME, 0);
+		Log.i(LOG_TAG, "Getting settings");
+		mSettings = PreferenceManager.getDefaultSharedPreferences(this);// getSharedPreferences(PREFS_NAME,
+		// 0);
 		// controls
 		mPhoneEntry = (EditText) findViewById(R.id.textPhone);
 		mSMSContent = (EditText) findViewById(R.id.SMSContent);
 		mSpinHour = (Spinner) findViewById(R.id.SpinnerHours);
 		mSpinMinute = (Spinner) findViewById(R.id.SpinnerMinutes);
-		//mCbStartOnBoot = (CheckBox) findViewById(R.id.cbStartOnBoot);
 		mTextFrom = (TextView) findViewById(R.id.textFrom);
 		mTextUntil = (TextView) findViewById(R.id.textUntil);
 		// fill controls
@@ -104,13 +103,16 @@ public class LiveButton extends TabActivity {
 
 		Resources res = getResources(); // Resource object to get Drawables
 		TabHost tabHost = getTabHost(); // The activity TabHost
-
+		Log.i(LOG_TAG, "Adding clock tab");
 		tabHost.addTab(tabHost.newTabSpec("Clock").setIndicator("Clock", res.getDrawable(R.drawable.tab_clock))
 				.setContent(R.id.tabClock));
+		Log.i(LOG_TAG, "Adding messagetab");
 		tabHost.addTab(tabHost.newTabSpec("Message").setIndicator("Message", res.getDrawable(R.drawable.tab_message))
 				.setContent(R.id.tabMessage));
-		tabHost.addTab(tabHost.newTabSpec("Settings").setIndicator("Settings", res.getDrawable(R.drawable.tab_settings)).
-				setContent(new Intent(this,SettingsActivity.class)));
+		Log.i(LOG_TAG, "Adding settings tab");
+		tabHost.addTab(tabHost.newTabSpec("Settings")
+				.setIndicator("Settings", res.getDrawable(R.drawable.tab_settings)).setContent(
+						new Intent(this, SettingsActivity.class)));
 		setUICallbacks();
 
 	}
@@ -120,6 +122,7 @@ public class LiveButton extends TabActivity {
 	 */
 	private void setUICallbacks() {
 		// button Pick contact
+		Log.i(LOG_TAG, "Setting UI callbacks");
 		Button buttonPick = (Button) findViewById(R.id.buttonPick);
 
 		buttonPick.setOnClickListener(new OnClickListener() {
@@ -135,8 +138,9 @@ public class LiveButton extends TabActivity {
 		buttonStart.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v) {				
+			public void onClick(View v) {
 				// schedule alarm
+				Log.i(LOG_TAG, "User clicked start");
 				String phoneNumber = mPhoneEntry.getText().toString();
 				String SMS = mSMSContent.getText().toString();
 				if (phoneNumber.length() > 0) {
@@ -145,33 +149,30 @@ public class LiveButton extends TabActivity {
 					int hours = Integer.parseInt(mSpinHour.getSelectedItem().toString());
 					int minutes = Integer.parseInt(mSpinMinute.getSelectedItem().toString());
 					long interval = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000);
-					
-					if (interval > 0) {						
+
+					if (interval > 0) {
+						Log.i(LOG_TAG, "Scheduloing alarm");
 						Intent intent = new Intent(LiveButton.this, HeartbeatReceiver.class);
-						//TODO: delete!
-//						intent.putExtra(PREF_PHONE_NUMBER, phoneNumber);
-//						intent.putExtra(PREF_SMS_CONTENT, SMS);
-//						intent.putExtra(PREF_INTERVAL_MILLIS, interval);
-//						intent.putExtra(PREF_COUNTDOWN, mCountdown);
 						mSender = PendingIntent.getBroadcast(LiveButton.this, ACKNOWLEDGE_REQUEST_CODE, intent,
 								PendingIntent.FLAG_UPDATE_CURRENT);
-
-						Date dia =Calendar.getInstance().getTime();
-						dia.setHours(mHourFrom);
-						dia.setMinutes(mMinuteFrom);
-						alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, dia.getTime(), interval,
-								mSender);
+						Date day = Calendar.getInstance().getTime();
+						day.setHours(mHourFrom);
+						day.setMinutes(mMinuteFrom);
+						day.setSeconds(0);
+						alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, day.getTime(), interval, mSender);
 						writeSettings();
+						Log.i(LOG_TAG, "Live button monitor started");
 						Toast.makeText(LiveButton.this, "Live button monitor started", Toast.LENGTH_SHORT).show();
 					} else {
-						Toast
-								.makeText(
+						Log.i(LOG_TAG, "No valid interval when starting alarm");
+						Toast.makeText(
 										LiveButton.this,
 										"You have to select a valid interval (one of the hour or minute field must be greater than zero).",
 										Toast.LENGTH_SHORT).show();
 					}
 				} else {
-					Toast.makeText(LiveButton.this, "Aborting no phone selected.", Toast.LENGTH_SHORT).show();
+					Log.i(LOG_TAG, "No phone selected, can't schedule wakeup");
+					Toast.makeText(LiveButton.this, "No phone selected, can't schedule wakeup", Toast.LENGTH_SHORT).show();
 				}
 
 			}
@@ -184,6 +185,7 @@ public class LiveButton extends TabActivity {
 			public void onClick(View v) {
 				try {
 					// Cancel pending alarm
+					Log.i(LOG_TAG, "Canceling pending alarm");
 					Intent intent = new Intent(LiveButton.this, HeartbeatReceiver.class);
 
 					mSender = PendingIntent.getBroadcast(LiveButton.this, ACKNOWLEDGE_REQUEST_CODE, intent,
@@ -203,6 +205,7 @@ public class LiveButton extends TabActivity {
 		buttonPickStart.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Log.i(LOG_TAG, "Selecting start time");
 				showDialog(TIME_DIALOG_ID_START);
 			}
 		});
@@ -211,6 +214,7 @@ public class LiveButton extends TabActivity {
 		buttonPickStop.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Log.i(LOG_TAG, "Selecting stop time");
 				showDialog(TIME_DIALOG_ID_STOP);
 			}
 		});
@@ -242,9 +246,9 @@ public class LiveButton extends TabActivity {
 	}
 
 	private void readSettings() {
-		// Rescue saved preferences			
+		// Rescue saved preferences
 		// Time
-		
+		Log.i(LOG_TAG, "Reading settings");
 		int hours = mSettings.getInt(getString(R.string.hoursRepeatPref), 0);
 		int minutes = mSettings.getInt(getString(R.string.minutesRepeatPref), 0);
 		mSpinHour.setSelection(hours);
@@ -266,6 +270,7 @@ public class LiveButton extends TabActivity {
 	}
 
 	private void writeSettings() {
+		Log.i(LOG_TAG, "Writing settings");
 		// Save preferences
 		SharedPreferences.Editor editor = mSettings.edit();
 		// Start on boot
@@ -282,7 +287,7 @@ public class LiveButton extends TabActivity {
 		// call details
 		editor.putString(getString(R.string.phoneNumberPref), mPhoneEntry.getText().toString());
 		editor.putString(getString(R.string.SMSContentPref), mSMSContent.getText().toString());
-		
+
 		editor.commit();
 	}
 
@@ -291,9 +296,11 @@ public class LiveButton extends TabActivity {
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
 			case CONTACT_PICKER_RESULT:
+				Log.i(LOG_TAG, "Contact chosen");
 				Cursor cursor = null;
 				String phone = "";
 				try {
@@ -312,10 +319,10 @@ public class LiveButton extends TabActivity {
 						phone = cursor.getString(phoneIdx);
 
 					} else {
-						Log.w(DEBUG_TAG, "No results");
+						Log.w(LOG_TAG, "No results");
 					}
 				} catch (Exception e) {
-					Log.e(DEBUG_TAG, "Failed to get phone data", e);
+					Log.e(LOG_TAG, "Failed to get phone data" + Log.getStackTraceString(e));
 				} finally {
 					if (cursor != null) {
 						cursor.close();
@@ -331,7 +338,7 @@ public class LiveButton extends TabActivity {
 			}
 
 		} else {
-			Log.w(DEBUG_TAG, "Warning: activity result not ok");
+			Log.e(LOG_TAG, "Warning: activity result not ok");
 		}
 	}
 

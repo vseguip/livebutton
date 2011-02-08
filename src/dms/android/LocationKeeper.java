@@ -3,7 +3,6 @@ package dms.android;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Service;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
@@ -11,7 +10,7 @@ import android.util.Log;
 
 public class LocationKeeper {
 	private static final int MAX_METERS = 5;
-	private static final String LOCATION_KEEPER = "LocationKeeper";
+	private static final String LOG_TAG = "LocationKeeper";
 	// Access through getter function
 	private static Location bestKnownLocation;
 	private static final int TWO_MINUTES = 1000 * 60 * 2;
@@ -27,6 +26,7 @@ public class LocationKeeper {
 	 */
 	public static synchronized boolean checkAndSetLocation(Location newLocation) {
 		if (isBetterLocation(newLocation, bestKnownLocation)) {
+			Log.i(LOG_TAG, "Setting best known location to "+newLocation.toString());
 			bestKnownLocation = newLocation;
 			return true;
 		}
@@ -112,13 +112,14 @@ public class LocationKeeper {
 
 	// Factory method
 	public static List<LocationKeeper> MakeLocationKeepers(Context context) {
+		Log.i(LOG_TAG, "Making LocationKeepers for all providers");
 		LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		List<LocationKeeper> keepers = new ArrayList<LocationKeeper>();
 		List<String> providers = locationManager.getAllProviders();
 		// Instantiate a listener for every provider. While we are at it, check
 		// last known position for each of them and set the best found. May be
 		// null.
-		for (String provider : providers) {
+		for (String provider : providers) {			
 			keepers.add(new LocationKeeper(locationManager, provider));
 		}
 		return keepers;
@@ -130,27 +131,26 @@ public class LocationKeeper {
 
 	// Don't construct outside factory
 	private LocationKeeper(LocationManager locationManager, String provider) {
+		Log.i(LOG_TAG, "Creating new LocationKeeper for "+provider);
 		mProvider = provider;
 		mLocationManager = locationManager;
 		checkAndSetLocation(mLocationManager.getLastKnownLocation(provider));
 	}
 
 	public void startUpdate(Runnable newFixCallback, Runnable eventCallback) {
+		Log.i(LOG_TAG, "Start update receivings for " + mProvider);
 		mListener = new LiveButtonLocationListener(this, newFixCallback, eventCallback);
 		mLocationManager.requestLocationUpdates(mProvider, 0, 0, mListener);
 	}
 
 	public void stopUpdate() {
+		Log.i(LOG_TAG, "Stop update receivings for " + mProvider);
 		mLocationManager.removeUpdates(mListener);
 	}
 
 	public void stopUpdate(LiveButtonLocationListener listener) {
 
 		mLocationManager.removeUpdates(listener);
-	}
-
-	Location getPosition(Service context) {
-		return getCurrentLocation();
 	}
 
 }

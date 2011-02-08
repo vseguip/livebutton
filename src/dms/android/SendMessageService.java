@@ -18,6 +18,7 @@ import android.location.Location;
 import android.os.Binder;
 import android.os.IBinder;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -32,7 +33,7 @@ import android.widget.Toast;
  * 
  */
 public class SendMessageService extends Service {
-	private static final String LOG_KEEPER = "LogKeeper";
+	private static final String LOG_TAG = "SendMessageService";
 	public final static int SMS_SENT_REQUEST_CODE = 1005;
 	public final static int SMS_DELIVERED_REQUEST_CODE = 1006;
 	public int mNProviders;
@@ -50,13 +51,17 @@ public class SendMessageService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		Log.i(LOG_TAG, "Creating SendMessageService");
 	}
 
 	@Override
 	public void onDestroy() {
+		Log.i(LOG_TAG, "Destroying SendMessageService");
+		Log.i(LOG_TAG, "Unregistering sms receives");
 		// unregister receives on destruction
 		unregisterReceiver(mSMSReceiver);
 		unregisterReceiver(mSMSDelivered);
+		Log.i(LOG_TAG, "Unregistering location manager");
 		// unregister location managers et. al.
 		for (LocationKeeper k : mLocKeepers) {
 			k.stopUpdate();
@@ -66,15 +71,19 @@ public class SendMessageService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int StartId) {
 		try {
+			Log.i(LOG_TAG, "Starting SendMessageService");
 			final String phoneNumber = intent.getStringExtra("phoneNumber");
 			final String sms = intent.getStringExtra("SMS");
 
 			// Get a list of location keepers (will also update our last known
 			// location
+			Log.i(LOG_TAG, "Getting list of all LocationKeepers");
 			final List<LocationKeeper> locs = LocationKeeper.MakeLocationKeepers(this);
 			mLocKeepers = locs;
 			// get best current location and send it immediately
+			Log.i(LOG_TAG, "Getting best current location");
 			Location loc = LocationKeeper.getCurrentLocation();
+			Log.i(LOG_TAG, "Sending current best location");
 			sendMessage(phoneNumber, sms, loc);
 			// start a listener for each of them
 			// will deregister updates for each provider once
@@ -83,16 +92,18 @@ public class SendMessageService extends Service {
 			// Can use two runnables, one for all cases (received a fix of
 			// sorts)
 			// and another for when the fix is better than the current
+			Log.i(LOG_TAG, "Start listeners fot the rest of fixes");
 			mNProviders = locs.size();
 			for (final LocationKeeper k : locs) {
 				k.startUpdate(new Runnable() {
 					public void run() {
+						Log.i(LOG_TAG, "Better location received. Sending");
 						Location loc = LocationKeeper.getCurrentLocation();
-						sendMessage(phoneNumber, sms, loc);
-						;
+						sendMessage(phoneNumber, sms, loc);						
 					}
 				}, new Runnable() {
 					public void run() {
+						Log.i(LOG_TAG, "Removing LocationKeeper");
 						locs.remove(k);
 						if (locs.size() == 0)
 							stopSelf();
@@ -101,12 +112,13 @@ public class SendMessageService extends Service {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.i(LOG_TAG, Log.getStackTraceString(e));
 		}
 		return START_REDELIVER_INTENT;
 	}
 
 	private void sendMessage(String phoneNumber, String sms, Location loc) {
+		Log.i(LOG_TAG, "Sending message to "+ phoneNumber);
 		String descLoc = "(unknown position)";
 		if (loc != null) {
 			descLoc = // TODO: translate to real address
@@ -132,19 +144,24 @@ public class SendMessageService extends Service {
 			public void onReceive(Context context, Intent intent) {
 				switch (getResultCode()) {
 				case Activity.RESULT_OK:
+					Log.i(LOG_TAG, "SMS sent ");
 					Toast.makeText(context, "SMS sent", Toast.LENGTH_SHORT).show();
 
 					break;
 				case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+					Log.e(LOG_TAG, "Generic failure");
 					Toast.makeText(context, "Generic failure", Toast.LENGTH_SHORT).show();
 					break;
 				case SmsManager.RESULT_ERROR_NO_SERVICE:
+					Log.e(LOG_TAG, "No service");
 					Toast.makeText(context, "No service", Toast.LENGTH_SHORT).show();
 					break;
 				case SmsManager.RESULT_ERROR_NULL_PDU:
+					Log.e(LOG_TAG, "Null PDU");
 					Toast.makeText(context, "Null PDU", Toast.LENGTH_SHORT).show();
 					break;
 				case SmsManager.RESULT_ERROR_RADIO_OFF:
+					Log.e(LOG_TAG, "Radio off");
 					Toast.makeText(context, "Radio off", Toast.LENGTH_SHORT).show();
 					break;
 				}
@@ -157,9 +174,11 @@ public class SendMessageService extends Service {
 			public void onReceive(Context contect, Intent intent) {
 				switch (getResultCode()) {
 				case Activity.RESULT_OK:
+					Log.i(LOG_TAG, "SMS delivered");
 					Toast.makeText(getBaseContext(), "SMS delivered", Toast.LENGTH_SHORT).show();
 					break;
 				case Activity.RESULT_CANCELED:
+					Log.e(LOG_TAG, "SMS not delivered");
 					Toast.makeText(getBaseContext(), "SMS not delivered", Toast.LENGTH_SHORT).show();
 					break;
 				}
@@ -167,17 +186,20 @@ public class SendMessageService extends Service {
 
 		};
 		// ---when the SMS has been delivered---
+		Log.i(LOG_TAG, "Register SMS delivered listener");
 		registerReceiver(mSMSDelivered, new IntentFilter(DELIVERED));
 		// partir el mensaje y enviar en trozos ya que algunos telefonos
 		// fallan al enviar mensajes algo largos!
+		Log.i(LOG_TAG, "Partitioning message in multiple pieces");
 		SmsManager sms = SmsManager.getDefault();
 		ArrayList<String> mensajes = sms.divideMessage(message);
 		ArrayList<PendingIntent> sentPI = new ArrayList<PendingIntent>();
 		ArrayList<PendingIntent> deliveredPI = new ArrayList<PendingIntent>();
-		for (String msg : mensajes) {
+		for (int i=0; i < mensajes.size(); i++) {
 			sentPI.add(PendingIntent.getBroadcast(this, SMS_SENT_REQUEST_CODE, new Intent(SENT), 0));
 			deliveredPI.add(PendingIntent.getBroadcast(this, SMS_DELIVERED_REQUEST_CODE, new Intent(DELIVERED), 0));
 		}
+		Log.i(LOG_TAG, "Send multipart SMS");
 		sms.sendMultipartTextMessage(phoneNumber, null, mensajes, sentPI, deliveredPI);
 	}
 
