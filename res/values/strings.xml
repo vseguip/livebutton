@@ -11,7 +11,7 @@
 <string name="textPickNumber">Pick number</string>
 <string name="buttonPick">Pick phone</string>
 <string name="timeRemaining">Time remaining: </string>
-<string name="buttonCancelCall">Cancel call</string>
+<string name="buttonCancelCall">Acknowledge Alarm</string>
 <string name="buttonStop">Stop</string>
 <string name="textHours">Hours</string>
 <string name="textMinutes">Minutes</string>
