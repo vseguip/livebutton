@@ -4,7 +4,7 @@
 	<string name="startOnBoot">Iniciar con el teléfono</string>
 	<string name="textRepeat">Repetir cada</string>
 	<string name="buttonStart">Iniciar</string>
-	<string name="textCallNumber">Llamar al número</string>
+	<string name="textCallNumber">Enviar al número</string>
 	<string name="textMessageToSend">Mensaje a enviar</string>
 	<string name="SMSContent">El usuario no reconoció la alarma a las #time. Su
 		última posición conocida es: #position </string>

@@ -4,7 +4,7 @@
 
 	<string name="textRepeat">Repeat every</string>
 	<string name="buttonStart">Start</string>
-	<string name="textCallNumber">Call number</string>
+	<string name="textCallNumber">Text number</string>
 	<string name="textMessageToSend">Message to send</string>
 	<string name="SMSContent">The user stopped responding at #time and the last
 		known location is #position </string>
