@@ -32,6 +32,8 @@
 	<string name="prefRingtoneSelectSummary">Ringtone to use during the countdown</string>
 	<string name="prefCountdownTimerText">Countdown timer</string>
 	<string name="prefCountdownTimerSummaryText">Number of seconds before the timer finishes
+	<string name="prefVibrationText">Vibrate</string>
+	<string name="prefVibrationSummaryText">Vibrate during countdown</string>
 	</string>
 
 

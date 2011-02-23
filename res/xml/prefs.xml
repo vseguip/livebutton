@@ -17,5 +17,10 @@
 			android:entries="@array/countdownArray" 
 			android:entryValues="@array/countdownArray"
 			android:key="@string/countDownTimerPref"/>
+		<CheckBoxPreference android:title="@string/prefVibrationText"
+			android:defaultValue="false"
+			android:summary="@string/prefVibrationSummaryText"
+			android:key="@string/vibratePref" />
+			
 	</PreferenceCategory>
 </PreferenceScreen>

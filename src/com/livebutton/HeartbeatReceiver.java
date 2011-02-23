@@ -26,6 +26,7 @@ public class HeartbeatReceiver extends BroadcastReceiver {
 	private long mInterval;
 	private String mRingtone;
 	private boolean mStartOnBoot;
+	private boolean mVibrate;
 
 	private void readSettings(Context context) {
 		Log.i(LOG_TAG, "Reading settings");
@@ -60,6 +61,7 @@ public class HeartbeatReceiver extends BroadcastReceiver {
 		sms = mSettings.getString(context.getString(R.string.SMSContentPref), context.getString(R.string.SMSContent));
 		// Start on boot active?
 		mStartOnBoot = mSettings.getBoolean(context.getString(R.string.startOnBootPref), false);
+		mVibrate = mSettings.getBoolean(context.getString(R.string.vibratePref), false);
 	}
 
 	@Override
@@ -108,6 +110,7 @@ public class HeartbeatReceiver extends BroadcastReceiver {
 			newIntent.putExtra(context.getString(R.string.phoneNumberPref), phoneNumber);
 			newIntent.putExtra(context.getString(R.string.SMSContentPref), sms);
 			newIntent.putExtra(context.getString(R.string.ringtonePref), mRingtone);
+			newIntent.putExtra(context.getString(R.string.vibratePref), mVibrate);
 			context.startActivity(newIntent);
 		}else{
 			Log.i(LOG_TAG, "Alarm is from the past");	

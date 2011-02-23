@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 public class AcknowledgeActivity extends Activity {
 	final static int CALL_REQUEST = 1003;
 	private String LOG_TAG="AcknowledgeActivity";
+	private Vibrator mVib;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -20,12 +22,14 @@ public class AcknowledgeActivity extends Activity {
 		Log.i(LOG_TAG, "Creating acknowledge activity");
 		setContentView(R.layout.acknowledge);
 		Log.i(LOG_TAG, "Getting prefs");
+		mVib = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 		final String phoneNumber = getIntent().getStringExtra(getString(R.string.phoneNumberPref));
 		final String sms = getIntent().getStringExtra(getString(R.string.SMSContentPref));
 		int countdown = getIntent().getIntExtra(getString(R.string.countDownTimerPref),10);
 		String ringtone = getIntent().getStringExtra(getString(R.string.ringtonePref));
+		final boolean vibrate = getIntent().getBooleanExtra(getString(R.string.vibratePref), false);
 		if (countdown < 1)
-			countdown = 10;
+			countdown = 10;		
 		final TextView textCounter = (TextView) findViewById(R.id.timeRemaining);		
 		textCounter.setText(Integer.toString(countdown));
 		Utils.playAlarm(this, ringtone);
@@ -55,12 +59,18 @@ public class AcknowledgeActivity extends Activity {
 			public void onClick(View v) {
 				Log.i(LOG_TAG, "Countdown canceled");
 				timer.cancel();
+				if(vibrate && (mVib!=null)) {
+					mVib.cancel();
+				}
 				Utils.stopAlarm();
 				Log.i(LOG_TAG, "Finishing AcknowledgeActivity");
 				AcknowledgeActivity.this.finish();
 			}
 		});
 		Log.i(LOG_TAG, "Starting countdown");
+		if(vibrate && (mVib!=null)) {		
+			mVib.vibrate(countdown*1000);
+		}
 		timer.start();
 	}
 

@@ -13,4 +13,5 @@
 	<string name="countDownTimerPref">countDownTimer</string>
 	<string name="startOnBootPref">startOnBoot</string>
 	<string name="ringtonePref">ringtonePref</string>
+	<string name="vibratePref">vibratePref</string>
 	</resources>

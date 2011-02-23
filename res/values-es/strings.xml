@@ -32,5 +32,7 @@
 	<string name="prefRingtoneSelectSummary">Tono a usar durante la cuenta atrás</string>
 	<string name="prefCountdownTimerText">Temporizador</string>
 	<string name="prefCountdownTimerSummaryText">Numero de segundos de la cuenta atrás
+	<string name="prefVibrationText">Vibrar</string>
+	<string name="prefVibrationSummaryText">Vibrar durante la cuenta atrás</string>
 	</string>
 </resources>
