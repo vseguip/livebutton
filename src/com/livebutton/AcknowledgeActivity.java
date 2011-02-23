@@ -64,4 +64,10 @@ public class AcknowledgeActivity extends Activity {
 		timer.start();
 	}
 
+
+	@Override 
+	public void onPause() {
+		super.onPause();
+		
+	}
 }

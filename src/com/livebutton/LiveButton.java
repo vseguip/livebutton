@@ -103,14 +103,14 @@ public class LiveButton extends TabActivity {
 		Resources res = getResources(); // Resource object to get Drawables
 		TabHost tabHost = getTabHost(); // The activity TabHost
 		Log.i(LOG_TAG, "Adding clock tab");
-		tabHost.addTab(tabHost.newTabSpec("Clock").setIndicator("Clock", res.getDrawable(R.drawable.tab_clock))
+		tabHost.addTab(tabHost.newTabSpec("Clock").setIndicator(getString(R.string.tabClockName), res.getDrawable(R.drawable.tab_clock))
 				.setContent(R.id.tabClock));
 		Log.i(LOG_TAG, "Adding messagetab");
-		tabHost.addTab(tabHost.newTabSpec("Message").setIndicator("Message", res.getDrawable(R.drawable.tab_message))
+		tabHost.addTab(tabHost.newTabSpec("Message").setIndicator(getString(R.string.tabMessageName), res.getDrawable(R.drawable.tab_message))
 				.setContent(R.id.tabMessage));
 		Log.i(LOG_TAG, "Adding settings tab");
 		tabHost.addTab(tabHost.newTabSpec("Settings")
-				.setIndicator("Settings", res.getDrawable(R.drawable.tab_settings)).setContent(
+				.setIndicator(getString(R.string.tabSettingsName), res.getDrawable(R.drawable.tab_settings)).setContent(
 						new Intent(this, SettingsActivity.class)));
 		setUICallbacks();
 
@@ -244,6 +244,11 @@ public class LiveButton extends TabActivity {
 		writeSettings();
 	}
 
+	@Override 
+	public void onPause() {
+		super.onPause();
+		writeSettings();
+	}
 	private void readSettings() {
 		// Rescue saved preferences
 		// Time
