@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Live Button</string>
+	<string name="startOnBoot">Iniciar amb el telèfon</string>
+	<string name="textRepeat">Repetir cada</string>
+	<string name="buttonStart">Iniciar</string>
+	<string name="textCallNumber">Enviar al telèfon</string>
+	<string name="textMessageToSend">Missatge per enviar</string>
+	<string name="SMSContent">L\'usuari no va reconeixer l\'alarma a les #time. L\'última posició coneguda és: #position </string>
+	<string name="textPickNumber">Escollir numero</string>
+	<string name="buttonPick">Escollir telèfon</string>
+	<string name="timeRemaining">Temps que resta: </string>
+	<string name="buttonCancelCall">Reconeixer alarma</string>
+	<string name="buttonStop">Parar</string>
+	<string name="textHours">Hores</string>
+	<string name="textMinutes">Minuts</string>
+
+	<string name="textActiveTime">Interval actiu Live Button</string>
+	<string name="textUntil">Parar Live Button a les</string>
+	<string name="textFrom">Iniciar Live button a les</string>
+	<string name="tabClockName">Hora</string>
+	<string name="tabMessageName">Missatge</string>
+	<string name="tabSettingsName">Preferències</string>
+	<string name="prefStartOnBootText">Iniciar amb telèfon</string>
+	<string name="prefActivitySettingsText">Preferències generals </string>
+	<string name="prefStartOnBootSummaryText">Iniciar LiveButton cada cop que s\'inicia el telèfon
+	</string>
+	<string name="prefCountdownSettingsText">Preferències compte enrere</string>
+	<string name="prefRingtonePreferenceText">Ajustes de to</string>
+	<string name="prefRingtoneSelect">Escollir to</string>
+	<string name="prefRingtoneSelectSummary">To per emprar durant el compte enrere</string>
+	<string name="prefCountdownTimerText">Temporitzador</string>
+	<string name="prefCountdownTimerSummaryText">Nombre de segons del compte enrere
+	</string>
+	<string name="prefVibrationText">Vibrar</string>
+	<string name="prefVibrationSummaryText">Vibrar durant el compte enrere</string>	
+</resources>
