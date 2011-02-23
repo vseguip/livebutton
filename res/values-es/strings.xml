@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Live Button</string>
+	<string name="startOnBoot">Iniciar con el teléfono</string>
+	<string name="textRepeat">Repetir cada</string>
+	<string name="buttonStart">Iniciar</string>
+	<string name="textCallNumber">Llamar al número</string>
+	<string name="textMessageToSend">Mensaje a enviar</string>
+	<string name="SMSContent">El usuario no reconoció la alarma a las #time. Su
+		última posición conocida es: #position </string>
+	<string name="textPickNumber">Escoger número</string>
+	<string name="buttonPick">Escoger teléfono</string>
+	<string name="timeRemaining">Tiempo que queda: </string>
+	<string name="buttonCancelCall">Reconocer alarma</string>
+	<string name="buttonStop">Detener</string>
+	<string name="textHours">Horas</string>
+	<string name="textMinutes">Minutos</string>
+
+	<string name="textActiveTime">Intervalo activo Live Button</string>
+	<string name="textUntil">Detener Live Button a las</string>
+	<string name="textFrom">Iniciar Live button a las</string>
+	<string name="tabClockName">Hora</string>
+	<string name="tabMessageName">Mensaje</string>
+	<string name="tabSettingsName">Ajustes</string>
+	<string name="prefStartOnBootText">Iniciar con teléfono</string>
+	<string name="prefActivitySettingsText">Ajustes </string>
+	<string name="prefStartOnBootSummaryText">Iniciar LiveButton cada vez que inicie el teléfono
+	</string>
+	<string name="prefCountdownSettingsText">Ajustes cuenta atrás</string>
+	<string name="prefRingtonePreferenceText">Ajustes de tono</string>
+	<string name="prefRingtoneSelect">Escoger tono</string>
+	<string name="prefRingtoneSelectSummary">Tono a usar durante la cuenta atrás</string>
+	<string name="prefCountdownTimerText">Temporizador</string>
+	<string name="prefCountdownTimerSummaryText">Numero de segundos de la cuenta atrás
+	</string>
+</resources>
