@@ -254,7 +254,7 @@ public class LiveButton extends TabActivity {
 		// Time
 		Log.i(LOG_TAG, "Reading settings");
 		int hours = mSettings.getInt(getString(R.string.hoursRepeatPref), 0);
-		int minutes = mSettings.getInt(getString(R.string.minutesRepeatPref), 0);
+		int minutes = mSettings.getInt(getString(R.string.minutesRepeatPref), 1);
 		mSpinHour.setSelection(hours);
 		mSpinMinute.setSelection(minutes);
 		// Start time

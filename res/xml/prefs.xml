@@ -14,6 +14,7 @@
 			android:key="@string/ringtonePref" />
 		<ListPreference android:title="@string/prefCountdownTimerText"
 			android:summary="@string/prefCountdownTimerSummaryText"
+			android:defaultValue="30"
 			android:entries="@array/countdownArray" 
 			android:entryValues="@array/countdownArray"
 			android:key="@string/countDownTimerPref"/>
