@@ -1,22 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="app_name">Live Button</string>
-<string name="startOnBoot">Start on phone boot</string>
-<string name="textRepeat">Repeat every</string>
-<string name="buttonStart">Start</string>
-<string name="textCallNumber">Call number</string>
-<string name="textMessageToSend">Message to send</string>
-<string name="SMSContent">The user stopped responding at #time and the last known location is #position </string>
-<string name="textPickNumber">Pick number</string>
-<string name="buttonPick">Pick phone</string>
-<string name="timeRemaining">Time remaining: </string>
-<string name="buttonCancelCall">Acknowledge Alarm</string>
-<string name="buttonStop">Stop</string>
-<string name="textHours">Hours</string>
-<string name="textMinutes">Minutes</string>
+	<string name="app_name">Live Button</string>
 
-<string name="textActiveTime">Live Button active interval</string>
-<string name="textUntil">Stop Live Button at</string>
-<string name="textFrom">Start Live button at</string>
+	<string name="textRepeat">Repeat every</string>
+	<string name="buttonStart">Start</string>
+	<string name="textCallNumber">Call number</string>
+	<string name="textMessageToSend">Message to send</string>
+	<string name="SMSContent">The user stopped responding at #time and the last
+		known location is #position </string>
+	<string name="textPickNumber">Pick number</string>
+	<string name="buttonPick">Pick phone</string>
+	<string name="timeRemaining">Time remaining: </string>
+	<string name="buttonCancelCall">Acknowledge Alarm</string>
+	<string name="buttonStop">Stop</string>
+	<string name="textHours">Hours</string>
+	<string name="textMinutes">Minutes</string>
+
+	<string name="textActiveTime">Live Button active interval</string>
+	<string name="textUntil">Stop Live Button at</string>
+	<string name="textFrom">Start Live button at</string>
+	<string name="tabClockName">Clock</string>
+	<string name="tabMessageName">Message</string>
+	<string name="tabSettingsName">Settings</string>
+	<string name="prefStartOnBootText">Start on phone boot</string>
+	<string name="prefActivitySettingsText">Activity settings</string>
+	<string name="prefStartOnBootSummaryText">Start LiveButton every time the telephone boots
+	</string>
+	<string name="prefCountdownSettingsText">Countdown settings</string>
+	<string name="prefRingtonePreferenceText">Ringtone preferences</string>
+	<string name="prefRingtoneSelect">Select a ringtone</string>
+	<string name="prefRingtoneSelectSummary">Ringtone to use during the countdown</string>
+	<string name="prefCountdownTimerText">Countdown timer</string>
+	<string name="prefCountdownTimerSummaryText">Number of seconds before the timer finishes
+	</string>
+
+
+
 
 </resources>

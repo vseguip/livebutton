@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory android:title="Activity settings">
-		<CheckBoxPreference android:title="Start on boot"
+	<PreferenceCategory android:title="@string/prefActivitySettingsText">
+		<CheckBoxPreference android:title="@string/prefStartOnBootText"
 			android:defaultValue="false"
-			android:summary="Start LiveButton every time the telephone boots"
+			android:summary="@string/prefStartOnBootSummaryText"
 			android:key="@string/startOnBootPref" />
 
 	</PreferenceCategory>
-	<PreferenceCategory android:title="Countdown settings">
-		<RingtonePreference android:name="Ringtone Preference"
-			android:summary="Select a ringtone" android:title="Ringtones"
-			android:key="ringtonePref" />
-		<ListPreference android:title="Countdown timer"
-			android:summary="Number of seconds before the timer finishes"
+	<PreferenceCategory android:title="@string/prefCountdownSettingsText">
+		<RingtonePreference 
+			android:summary="@string/prefRingtoneSelectSummary" 
+			android:title="@string/prefRingtoneSelect"
+			android:key="@string/ringtonePref" />
+		<ListPreference android:title="@string/prefCountdownTimerText"
+			android:summary="@string/prefCountdownTimerSummaryText"
 			android:entries="@array/countdownArray" 
 			android:entryValues="@array/countdownArray"
 			android:key="@string/countDownTimerPref"/>
