@@ -13,8 +13,9 @@ import android.widget.TextView;
 
 public class AcknowledgeActivity extends Activity {
 	final static int CALL_REQUEST = 1003;
-	private String LOG_TAG="AcknowledgeActivity";
+	private String LOG_TAG = "AcknowledgeActivity";
 	private Vibrator mVib;
+	private CountDownTimer mTimer;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -25,15 +26,15 @@ public class AcknowledgeActivity extends Activity {
 		mVib = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 		final String phoneNumber = getIntent().getStringExtra(getString(R.string.phoneNumberPref));
 		final String sms = getIntent().getStringExtra(getString(R.string.SMSContentPref));
-		int countdown = getIntent().getIntExtra(getString(R.string.countDownTimerPref),10);
+		int countdown = getIntent().getIntExtra(getString(R.string.countDownTimerPref), 10);
 		String ringtone = getIntent().getStringExtra(getString(R.string.ringtonePref));
 		final boolean vibrate = getIntent().getBooleanExtra(getString(R.string.vibratePref), false);
 		if (countdown < 1)
-			countdown = 10;		
-		final TextView textCounter = (TextView) findViewById(R.id.timeRemaining);		
+			countdown = 10;
+		final TextView textCounter = (TextView) findViewById(R.id.timeRemaining);
 		textCounter.setText(Integer.toString(countdown));
 		Utils.playAlarm(this, ringtone);
-		final CountDownTimer timer = new CountDownTimer(countdown * 1000, 1000) {
+		mTimer = new CountDownTimer(countdown * 1000, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				textCounter.setText(Long.toString(millisUntilFinished / 1000));
@@ -43,6 +44,9 @@ public class AcknowledgeActivity extends Activity {
 			public void onFinish() {
 				Log.i(LOG_TAG, "Countdown ended without user feedback. Sending message.");
 				Utils.stopAlarm();
+				if (vibrate && (mVib != null)) {
+					mVib.cancel();
+				}
 				Intent newIntent = new Intent(AcknowledgeActivity.this, SendMessageService.class);
 				newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				newIntent.putExtra("phoneNumber", phoneNumber);
@@ -58,8 +62,8 @@ public class AcknowledgeActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Log.i(LOG_TAG, "Countdown canceled");
-				timer.cancel();
-				if(vibrate && (mVib!=null)) {
+				mTimer.cancel();
+				if (vibrate && (mVib != null)) {
 					mVib.cancel();
 				}
 				Utils.stopAlarm();
@@ -68,16 +72,23 @@ public class AcknowledgeActivity extends Activity {
 			}
 		});
 		Log.i(LOG_TAG, "Starting countdown");
-		if(vibrate && (mVib!=null)) {		
-			mVib.vibrate(countdown*1000);
+		if (vibrate && (mVib != null)) {
+			mVib.vibrate(countdown * 1000);
 		}
-		timer.start();
+		mTimer.start();
 	}
 
-
-	@Override 
+	@Override
 	public void onPause() {
 		super.onPause();
-		
+		if (mTimer != null)
+			mTimer.cancel();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (mTimer != null)
+			mTimer.cancel();
 	}
 }
