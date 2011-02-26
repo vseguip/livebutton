@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.app.AlarmManager;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TabActivity;
 import android.app.TimePickerDialog;
@@ -34,8 +33,6 @@ public class LiveButton extends TabActivity {
 	// public static final String PREFS_NAME = "LiveButtonPreferences";
 	private static final int CONTACT_PICKER_RESULT = 1001;
 	static final int ACKNOWLEDGE_REQUEST_CODE = 1002;
-	private static final int TIME_DIALOG_ID_START = 1;
-	private static final int TIME_DIALOG_ID_STOP = 2;
 
 	private Spinner mSpinHour;
 	private Spinner mSpinMinute;
@@ -52,25 +49,6 @@ public class LiveButton extends TabActivity {
 	private int mHourUntil;
 	private int mMinuteUntil;
 
-	private TimePickerDialog.OnTimeSetListener mTimeSetListenerStart = new TimePickerDialog.OnTimeSetListener() {
-
-		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			mHourFrom = hourOfDay;
-			mMinuteFrom = minute;
-			updateDisplay();
-		}
-	};
-
-	private TimePickerDialog.OnTimeSetListener mTimeSetListenerStop = new TimePickerDialog.OnTimeSetListener() {
-
-		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			mHourUntil = hourOfDay;
-			mMinuteUntil = minute;
-			updateDisplay();
-		}
-	};
-
-	// TODO: Add starting on telephone boot
 	// TODO: Add icon on notification bar
 	/** Called when the activity is first created. */
 	@Override
@@ -100,18 +78,17 @@ public class LiveButton extends TabActivity {
 		adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mSpinMinute.setAdapter(adapter2);
 
-		Resources res = getResources(); // Resource object to get Drawables
+		Resources res = getResources();
 		TabHost tabHost = getTabHost(); // The activity TabHost
 		Log.i(LOG_TAG, "Adding clock tab");
-		tabHost.addTab(tabHost.newTabSpec("Clock").setIndicator(getString(R.string.tabClockName), res.getDrawable(R.drawable.tab_clock))
-				.setContent(R.id.tabClock));
+		tabHost.addTab(tabHost.newTabSpec("Clock").setIndicator(getString(R.string.tabClockName),
+				res.getDrawable(R.drawable.tab_clock)).setContent(R.id.tabClock));
 		Log.i(LOG_TAG, "Adding messagetab");
-		tabHost.addTab(tabHost.newTabSpec("Message").setIndicator(getString(R.string.tabMessageName), res.getDrawable(R.drawable.tab_message))
-				.setContent(R.id.tabMessage));
+		tabHost.addTab(tabHost.newTabSpec("Message").setIndicator(getString(R.string.tabMessageName),
+				res.getDrawable(R.drawable.tab_message)).setContent(R.id.tabMessage));
 		Log.i(LOG_TAG, "Adding settings tab");
-		tabHost.addTab(tabHost.newTabSpec("Settings")
-				.setIndicator(getString(R.string.tabSettingsName), res.getDrawable(R.drawable.tab_settings)).setContent(
-						new Intent(this, SettingsActivity.class)));
+		tabHost.addTab(tabHost.newTabSpec("Settings").setIndicator(getString(R.string.tabSettingsName),
+				res.getDrawable(R.drawable.tab_settings)).setContent(new Intent(this, SettingsActivity.class)));
 		setUICallbacks();
 
 	}
@@ -205,7 +182,15 @@ public class LiveButton extends TabActivity {
 			@Override
 			public void onClick(View v) {
 				Log.i(LOG_TAG, "Selecting start time");
-				showDialog(TIME_DIALOG_ID_START);
+				new TimePickerDialog(LiveButton.this, new TimePickerDialog.OnTimeSetListener() {
+
+					@Override
+					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+						mHourFrom = hourOfDay;
+						mMinuteFrom = minute;
+						mTextFrom.setText(new StringBuilder().append(Utils.pad(mHourFrom)).append(":").append(Utils.pad(mMinuteFrom)));
+					}
+				}, mHourFrom, mMinuteFrom, false).show();
 			}
 		});
 
@@ -214,27 +199,19 @@ public class LiveButton extends TabActivity {
 			@Override
 			public void onClick(View v) {
 				Log.i(LOG_TAG, "Selecting stop time");
-				showDialog(TIME_DIALOG_ID_STOP);
+				new TimePickerDialog(LiveButton.this, new TimePickerDialog.OnTimeSetListener() {
+
+					@Override
+					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+						mHourUntil = hourOfDay;
+						mMinuteUntil = minute;
+						mTextUntil.setText(new StringBuilder().append(Utils.pad(mHourUntil)).append(":")
+								.append(Utils.pad(mMinuteUntil)));
+					}
+				}, mHourUntil, mMinuteUntil, false).show();
 			}
 		});
 		readSettings();
-	}
-
-	private void updateDisplay() {
-		mTextFrom.setText(new StringBuilder().append(Utils.pad(mHourFrom)).append(":").append(Utils.pad(mMinuteFrom)));
-		mTextUntil.setText(new StringBuilder().append(Utils.pad(mHourUntil)).append(":")
-				.append(Utils.pad(mMinuteUntil)));
-	}
-
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-		case TIME_DIALOG_ID_START:
-			return new TimePickerDialog(this, mTimeSetListenerStart, mHourFrom, mMinuteFrom, false);
-		case TIME_DIALOG_ID_STOP:
-			return new TimePickerDialog(this, mTimeSetListenerStop, mHourUntil, mMinuteUntil, false);
-		}
-		return null;
 	}
 
 	@Override
@@ -244,11 +221,12 @@ public class LiveButton extends TabActivity {
 		writeSettings();
 	}
 
-	@Override 
+	@Override
 	public void onPause() {
 		super.onPause();
 		writeSettings();
 	}
+
 	private void readSettings() {
 		// Rescue saved preferences
 		// Time
@@ -264,7 +242,9 @@ public class LiveButton extends TabActivity {
 		mHourUntil = mSettings.getInt(getString(R.string.hourUntilPref), 21);
 		mMinuteUntil = mSettings.getInt(getString(R.string.minuteUntilPref), 0);
 		// Refresh view
-		updateDisplay();
+		mTextFrom.setText(new StringBuilder().append(Utils.pad(mHourFrom)).append(":").append(Utils.pad(mMinuteFrom)));
+		mTextUntil.setText(new StringBuilder().append(Utils.pad(mHourUntil)).append(":")
+				.append(Utils.pad(mMinuteUntil)));		
 		// call details
 		String phoneNumber = mSettings.getString(getString(R.string.phoneNumberPref), "");
 		mPhoneEntry.setText(phoneNumber);
