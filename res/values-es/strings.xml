@@ -11,6 +11,9 @@
 	<string name="textPickNumber">Escoger número</string>
 	<string name="buttonPick">Escoger teléfono</string>
 	<string name="timeRemaining">Tiempo que queda: </string>
+	<string name="nextAlarm">Proxima alarma </string>	
+	<string name="noAlarm">Ninguna alarma programada</string>	
+	
 	<string name="buttonCancelCall">Reconocer alarma</string>
 	<string name="buttonStop">Detener</string>
 	<string name="textHours">Horas</string>

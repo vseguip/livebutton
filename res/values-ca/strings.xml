@@ -10,6 +10,9 @@
 	<string name="textPickNumber">Escollir numero</string>
 	<string name="buttonPick">Escollir telèfon</string>
 	<string name="timeRemaining">Temps que resta: </string>
+	<string name="nextAlarm">Propera alarma</string>
+	<string name="noAlarm">Cap alarma programada </string>	
+	
 	<string name="buttonCancelCall">Reconeixer alarma</string>
 	<string name="buttonStop">Parar</string>
 	<string name="textHours">Hores</string>

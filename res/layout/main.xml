@@ -65,7 +65,7 @@
 								android:layout_width="wrap_content" android:layout_height="wrap_content"></Spinner>
 							<TextView android:layout_height="wrap_content"
 								android:text="@string/textHours" android:textStyle="bold"
-								android:layout_width="fill_parent" android:id="@+id/TextView01"
+								android:layout_width="fill_parent"
 								android:paddingTop="10dip" android:paddingRight="30dip"
 								android:paddingBottom="10dip"></TextView>
 
@@ -73,10 +73,20 @@
 								android:layout_width="wrap_content" android:layout_height="wrap_content"></Spinner>
 							<TextView android:layout_height="wrap_content"
 								android:text="@string/textMinutes" android:textStyle="bold"
-								android:layout_width="fill_parent" android:id="@+id/TextView01"
+								android:layout_width="fill_parent"
 								android:paddingTop="10dip" android:paddingBottom="10dip"></TextView>
 
 						</LinearLayout>
+
+						<TextView
+						    android:id="@+id/nextAlarm"
+						    android:layout_width="wrap_content"
+						    android:layout_height="wrap_content"
+						    android:text="@string/nextAlarm"
+						     android:paddingTop="10dip"
+						    android:textAppearance="?android:attr/textAppearanceLarge"
+						     />
+	
 					</LinearLayout>
 
 					<LinearLayout android:id="@+id/tabMessage"
@@ -134,7 +144,7 @@
 	</LinearLayout>
 	<LinearLayout android:layout_width="wrap_content"
 		style="@android:style/ButtonBar" android:layout_height="wrap_content"
-		android:orientation="vertical">
+		android:orientation="vertical" >
 		<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:stretchColumns="0,1">

@@ -11,6 +11,8 @@
 	<string name="textPickNumber">Pick number</string>
 	<string name="buttonPick">Pick phone</string>
 	<string name="timeRemaining">Time remaining: </string>
+	<string name="nextAlarm">Next alarm </string>
+	<string name="noAlarm">No alarm </string>	
 	<string name="buttonCancelCall">Acknowledge Alarm</string>
 	<string name="buttonStop">Stop</string>
 	<string name="textHours">Hours</string>
@@ -31,11 +33,9 @@
 	<string name="prefRingtoneSelect">Select a ringtone</string>
 	<string name="prefRingtoneSelectSummary">Ringtone to use during the countdown</string>
 	<string name="prefCountdownTimerText">Countdown timer</string>
-	<string name="prefCountdownTimerSummaryText">Number of seconds before the timer finishes
+	<string name="prefCountdownTimerSummaryText">Number of seconds before the timer finishes</string>
 	<string name="prefVibrationText">Vibrate</string>
 	<string name="prefVibrationSummaryText">Vibrate during countdown</string>
-	</string>
-
 
 
 

@@ -14,4 +14,6 @@
 	<string name="startOnBootPref">startOnBoot</string>
 	<string name="ringtonePref">ringtonePref</string>
 	<string name="vibratePref">vibratePref</string>
+	<string name="timeScheduled">timeScheduled</string>
+	
 	</resources>
