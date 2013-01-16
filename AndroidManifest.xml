@@ -1,36 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.livebutton" android:versionName="0.1.4" android:versionCode="5">
-	<application android:icon="@drawable/icon" android:label="@string/app_name">
-		<activity android:name=".LiveButton" android:label="@string/app_name"
-			android:theme="@android:style/Theme">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
-		<receiver android:name="HeartbeatReceiver">
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED"></action>
-				<category android:name="android.intent.category.HOME"></category>
-			</intent-filter>
-		</receiver>
-		<activity android:theme="@android:style/Theme" android:name=".AcknowledgeActivity"></activity>
+    package="com.livebutton"
+    android:versionCode="7"
+    android:versionName="0.1.5" >
 
-		<service android:name="SendMessageService"></service>
-		<activity android:name="SettingsActivity"></activity>
+    <uses-sdk
+        android:minSdkVersion="7"
+        android:targetSdkVersion="7" />
 
-	</application>
-	<uses-sdk android:minSdkVersion="7" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.CALL_PHONE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.SEND_SMS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.VIBRATE" >
+    </uses-permission>
 
-	<uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
-	<uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
-	<uses-permission android:name="android.permission.CALL_PRIVILEGED"></uses-permission>
-	<uses-permission android:name="android.permission.SEND_SMS"></uses-permission>
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name" >
+        <activity
+            android:name=".LiveButton"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
-<uses-permission android:name="android.permission.VIBRATE"></uses-permission>
-</manifest> 
+        <receiver android:name="HeartbeatReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" >
+                </action>
+
+                <category android:name="android.intent.category.HOME" >
+                </category>
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".AcknowledgeActivity"
+            android:theme="@android:style/Theme" >
+        </activity>
+
+        <service android:name="SendMessageService" >
+        </service>
+
+        <activity android:name="SettingsActivity" >
+        </activity>
+    </application>
+
+</manifest>
