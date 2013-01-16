@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Live Button</string>
-
+	<string name="startOnBoot">Start on phone boot</string>
 	<string name="textRepeat">Repeat every</string>
 	<string name="buttonStart">Start</string>
 	<string name="textCallNumber">Text number</string>
