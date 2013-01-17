@@ -27,6 +27,7 @@ public class HeartbeatReceiver extends BroadcastReceiver {
 	private String mRingtone;
 	private boolean mStartOnBoot;
 	private boolean mVibrate;
+	private boolean mStartCurrent;
 
 	private void readSettings(Context context) {
 		Log.i(LOG_TAG, "Reading settings");
@@ -62,6 +63,7 @@ public class HeartbeatReceiver extends BroadcastReceiver {
 		// Start on boot active?
 		mStartOnBoot = mSettings.getBoolean(context.getString(R.string.startOnBootPref), false);
 		mVibrate = mSettings.getBoolean(context.getString(R.string.vibratePref), false);
+		mStartCurrent = mSettings.getBoolean(context.getString(R.string.startCurrent), false);
 	}
 
 	@Override

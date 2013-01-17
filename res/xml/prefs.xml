@@ -22,6 +22,10 @@
 			android:defaultValue="false"
 			android:summary="@string/prefVibrationSummaryText"
 			android:key="@string/vibratePref" />
-			
+		<CheckBoxPreference android:title="@string/prefStartCurrentText"
+			android:defaultValue="false"
+			android:summary="@string/prefStartCurrentSummaryText"
+			android:key="@string/startCurrent" />
+				
 	</PreferenceCategory>
 </PreferenceScreen>

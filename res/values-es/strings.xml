@@ -37,5 +37,7 @@
 	<string name="prefCountdownTimerSummaryText">Numero de segundos de la cuenta atrás</string>
 	<string name="prefVibrationText">Vibrar</string>
 	<string name="prefVibrationSummaryText">Vibrar durante la cuenta atrás</string>
-	
+	<string name="prefStartCurrentText">Començar ara</string>	
+	<string name="prefStartCurrentSummaryText">Emprar hora actual per programar l\'alarma</string>
+		
 </resources>

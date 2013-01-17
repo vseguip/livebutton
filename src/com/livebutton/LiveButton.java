@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TabHost;
@@ -45,7 +46,6 @@ public class LiveButton extends TabActivity {
 	private SharedPreferences mSettings;
 	private TextView mTextFrom;
 	private TextView mTextUntil;
-
 	private long mNextAlarm;
 	private int mHourFrom;
 	private int mMinuteFrom;
@@ -53,6 +53,7 @@ public class LiveButton extends TabActivity {
 	private int mHourUntil;
 	private int mMinuteUntil;
 
+	private boolean mStartCurrent;
 	private Handler mHandler;
 
 	Runnable mStatusChecker = new Runnable() {
@@ -84,6 +85,7 @@ public class LiveButton extends TabActivity {
 		mSpinMinute = (Spinner) findViewById(R.id.SpinnerMinutes);
 		mTextFrom = (TextView) findViewById(R.id.textFrom);
 		mTextUntil = (TextView) findViewById(R.id.textUntil);
+		
 		// fill controls
 		ArrayAdapter<?> adapter = ArrayAdapter.createFromResource(
 																	this,
@@ -181,9 +183,11 @@ public class LiveButton extends TabActivity {
 				// schedule alarm
 				Log.i(LOG_TAG, "User clicked start");
 				String phoneNumber = mPhoneEntry.getText().toString();
+				readSettings();				
 				if (phoneNumber.length() > 0) {				
 					if (setupAlarm(true)) {
 						Log.i(LOG_TAG, "Scheduling alarm");
+						
 						writeSettings();
 						Log.i(LOG_TAG, "Live button monitor started");
 						Toast.makeText(LiveButton.this, "Live button monitor started", Toast.LENGTH_SHORT).show();
@@ -319,7 +323,8 @@ public class LiveButton extends TabActivity {
 		mPhoneEntry.setText(phoneNumber);
 		String SMS = mSettings.getString(getString(R.string.SMSContentPref), getString(R.string.SMSContent));
 		mSMSContent.setText(SMS);
-		
+		mStartCurrent = mSettings.getBoolean(getString(R.string.startCurrent), false);
+
 		Intent intent = new Intent(getApplicationContext(), HeartbeatReceiver.class);
 		mSender = PendingIntent.getBroadcast(	getApplicationContext(),
 															ACKNOWLEDGE_REQUEST_CODE,
@@ -341,10 +346,15 @@ public class LiveButton extends TabActivity {
 			if((hours == 0) &&(minutes == 0) )
 				return false;
 			Date day = Calendar.getInstance().getTime();
+			
 			long currentTime = day.getTime();
-			day.setHours(mHourFrom);
-			day.setMinutes(mMinuteFrom);
-			day.setSeconds(0);
+			if(!mStartCurrent) { 
+				//if we are reprogramming an existing alarm or we want to create it 
+				//without using the current time as the base time
+				day.setHours(mHourFrom);	
+				day.setMinutes(mMinuteFrom);
+				day.setSeconds(0); 
+			}
 			mNextAlarm = day.getTime();
 			long interval = (hours * 60 * 60 * 1000) + (minutes * 60 * 1000);
 			while(mNextAlarm<=currentTime)
@@ -378,7 +388,7 @@ public class LiveButton extends TabActivity {
 		// call details
 		editor.putString(getString(R.string.phoneNumberPref), mPhoneEntry.getText().toString());
 		editor.putString(getString(R.string.SMSContentPref), mSMSContent.getText().toString());
-
+		//Start using current time
 		editor.commit();
 		updateUIWithSettings();
 	}

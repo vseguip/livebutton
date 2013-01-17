@@ -36,7 +36,7 @@
 	<string name="prefCountdownTimerSummaryText">Number of seconds before the timer finishes</string>
 	<string name="prefVibrationText">Vibrate</string>
 	<string name="prefVibrationSummaryText">Vibrate during countdown</string>
-
-
+	<string name="prefStartCurrentText">Start current</string>	
+	<string name="prefStartCurrentSummaryText">Use current time as base for setting alarm or use the start time.</string>
 
 </resources>

@@ -15,5 +15,5 @@
 	<string name="ringtonePref">ringtonePref</string>
 	<string name="vibratePref">vibratePref</string>
 	<string name="timeScheduled">timeScheduled</string>
-	
+	<string name="startCurrent">startCurrent</string>
 	</resources>

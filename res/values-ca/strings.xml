@@ -37,4 +37,7 @@
 	</string>
 	<string name="prefVibrationText">Vibrar</string>
 	<string name="prefVibrationSummaryText">Vibrar durant el compte enrere</string>	
+	<string name="prefStartCurrentText">Empezar ahora</string>	
+	<string name="prefStartCurrentSummaryText">Usar hora actual para ajustar la alarma</string>
+	
 </resources>
