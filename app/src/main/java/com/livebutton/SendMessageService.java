@@ -1,5 +1,8 @@
 /**
- * 
+ *
+ * Copyright (c) 2015 Vicent Segui
+ * Distributed under the GNU GPL v2. For full terms see the file gpl.txt
+ *
  */
 package com.livebutton;
 
